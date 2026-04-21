@@ -345,6 +345,26 @@
   }
 
   /* ══════════════════════════════════════════
+     WISH POOL 許願池
+  ══════════════════════════════════════════ */
+  #wishes{padding:var(--sec-py) 0;background:var(--black);border-top:1px solid var(--border);}
+  .wish-form-wrap{max-width:600px;margin:0 auto;background:var(--card);border:1px solid var(--border2);padding:32px;}
+  .wish-input{width:100%;background:var(--card2);border:1px solid var(--border2);color:var(--white);padding:11px 14px;font-family:var(--fm);font-size:13px;outline:none;transition:var(--tr);box-sizing:border-box;}
+  .wish-input:focus{border-color:var(--red);}
+  .wish-textarea{width:100%;background:var(--card2);border:1px solid var(--border2);color:var(--white);padding:11px 14px;font-family:var(--fm);font-size:13px;outline:none;transition:var(--tr);resize:vertical;min-height:100px;box-sizing:border-box;}
+  .wish-textarea:focus{border-color:var(--red);}
+  .wish-input::placeholder,.wish-textarea::placeholder{color:var(--gray2);}
+  .wish-char{font-family:var(--fm);font-size:10px;color:var(--gray2);text-align:right;margin-top:4px;letter-spacing:1px;}
+  .wish-submit{width:100%;padding:13px;background:var(--red);color:var(--white);font-family:var(--fe);font-size:13px;font-weight:700;letter-spacing:3px;border:none;cursor:pointer;transition:var(--tr);margin-top:16px;}
+  .wish-submit:hover{background:var(--red-b);}
+  .wish-submit:disabled{opacity:.5;cursor:not-allowed;}
+  .wish-success{display:none;text-align:center;padding:28px;font-family:var(--fm);}
+  .wish-success-icon{font-size:36px;color:var(--red);margin-bottom:12px;}
+  .wish-success-title{font-family:var(--fe);font-size:16px;letter-spacing:3px;margin-bottom:8px;}
+  .wish-success-sub{font-size:13px;color:var(--gray);}
+  @media(max-width:767px){.wish-form-wrap{padding:20px;}}
+
+  /* ══════════════════════════════════════════
      PASSWORD MODAL
   ══════════════════════════════════════════ */
   .pw-modal-overlay{position:fixed;inset:0;z-index:9500;background:rgba(0,0,0,.9);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;pointer-events:none;transition:opacity .3s;}
@@ -421,6 +441,7 @@
       <li><a href="#works"     class="nav-link">WORKS</a></li>
       <li><a href="#upcoming"  class="nav-link">UPCOMING</a></li>
       <li><a href="#downloads" class="nav-link">DOWNLOADS</a></li>
+      <li><a href="#wishes"   class="nav-link">許願池</a></li>
     </ul>
     <button class="nav-menu-btn" id="menuBtn" aria-label="選單">
       <span class="hamburger-line"></span>
@@ -562,6 +583,34 @@
     </div>
   </div>
 </div>
+
+<!-- ══ WISH POOL 許願池 ══ -->
+<section id="wishes">
+  <div class="container">
+    <p class="section-label fade-up">// WISH POOL</p>
+    <h2 class="section-title fade-up">許 <span>願 池</span></h2>
+    <p class="section-desc fade-up" style="margin-bottom:32px;">有任何建議、想法或課程需求，投入許願池讓我知道 ✦</p>
+    <div class="wish-form-wrap fade-up">
+      <div id="wishSuccess" class="wish-success">
+        <div class="wish-success-icon"><i class="fa-solid fa-fish-fins"></i></div>
+        <div class="wish-success-title">願望已投入！</div>
+        <div class="wish-success-sub">感謝你的建議，我會認真閱讀每一則 ✦</div>
+      </div>
+      <form id="wishForm">
+        <div style="margin-bottom:12px;">
+          <input class="wish-input" type="text" name="name" placeholder="你的名字（選填）" maxlength="30" autocomplete="off"/>
+        </div>
+        <div>
+          <textarea class="wish-textarea" name="message" id="wishMsg" placeholder="寫下你的建議或想法..." maxlength="300" required></textarea>
+          <div class="wish-char"><span id="wishCharCount">0</span> / 300</div>
+        </div>
+        <button type="submit" class="wish-submit" id="wishSubmitBtn">
+          <i class="fa-solid fa-wand-sparkles"></i>&nbsp; 投入許願池
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
 
 <!-- ══ FOOTER ══ -->
 <footer id="footer">
@@ -778,6 +827,32 @@ document.getElementById('pwInput').addEventListener('keydown',e=>{if(e.key==='En
 document.getElementById('pwModal').addEventListener('click',e=>{if(e.target===document.getElementById('pwModal'))closePwModal();});
 const pwTog=document.getElementById('pwToggle'),pwInp=document.getElementById('pwInput');
 pwTog.addEventListener('click',()=>{const s=pwInp.type==='password';pwInp.type=s?'text':'password';pwTog.querySelector('i').className=s?'fa-solid fa-eye-slash':'fa-solid fa-eye';});
+
+/* ══════════════ Wish Pool 許願池 ══════════════ */
+(function(){
+  const msg=document.getElementById('wishMsg');
+  const cnt=document.getElementById('wishCharCount');
+  if(msg&&cnt){msg.addEventListener('input',()=>cnt.textContent=msg.value.length);}
+  const form=document.getElementById('wishForm');
+  if(!form)return;
+  form.addEventListener('submit',async function(e){
+    e.preventDefault();
+    const endpoint=(D.wishFormUrl||'').trim();
+    if(!endpoint){showToast('請在後台設定 Formspree 網址');return;}
+    const btn=document.getElementById('wishSubmitBtn');
+    btn.disabled=true;btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> 送出中...';
+    try{
+      const res=await fetch(endpoint,{method:'POST',headers:{'Accept':'application/json'},body:new FormData(form)});
+      if(res.ok){
+        form.style.display='none';
+        document.getElementById('wishSuccess').style.display='block';
+      }else{throw new Error('送出失敗');}
+    }catch(e){
+      btn.disabled=false;btn.innerHTML='<i class="fa-solid fa-wand-sparkles"></i>&nbsp; 投入許願池';
+      showToast('送出失敗，請稍後再試');
+    }
+  });
+})();
 
 function showToast(msg){
   const t=document.createElement('div');t.textContent=msg;

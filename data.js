@@ -263,5 +263,7 @@ var SITE_DATA = {
       "label": "物聯網",
       "badge": ""
     }
-  ]
+  ],
+
+  "wishFormUrl": ""
 };

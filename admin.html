@@ -392,6 +392,7 @@
           <div class="field-group"><div class="field-label">Hero 副標題</div><input type="text" class="field-input" id="s_subtitle"/></div>
           <div class="field-group span2"><div class="field-label">Hero 上方說明（Eyebrow）</div><input type="text" class="field-input" id="s_eyebrow"/></div>
           <div class="field-group span2"><div class="field-label">Hero 標籤（逗號分隔）</div><input type="text" class="field-input" id="s_heroTags" placeholder="標籤A, 標籤B"/><div class="field-hint">用逗號「,」分隔各標籤</div></div>
+          <div class="field-group span2"><div class="field-label">許願池 Formspree 網址</div><input type="text" class="field-input" id="s_wishFormUrl" placeholder="https://formspree.io/f/xxxxxxxx"/><div class="field-hint">至 formspree.io 免費註冊，建立表單後貼上網址</div></div>
           <div class="field-group span2"><div class="field-label">統計數字</div><div class="stats-row"><div style="flex:1"><div class="field-hint" style="margin-bottom:4px;">研習場次</div><input type="number" class="field-input" id="s_statWS" min="0"/></div><div style="flex:1"><div class="field-hint" style="margin-bottom:4px;">作品數</div><input type="number" class="field-input" id="s_statWK" min="0"/></div><div style="flex:1"><div class="field-hint" style="margin-bottom:4px;">年資</div><input type="number" class="field-input" id="s_statYR" min="0"/></div></div></div>
           <div class="field-group span2"><div class="field-label">個人介紹段落 1</div><textarea class="field-textarea" id="s_bio0" rows="3"></textarea><div class="field-hint">可使用 &lt;strong&gt;粗體&lt;/strong&gt;</div></div>
           <div class="field-group span2"><div class="field-label">個人介紹段落 2</div><textarea class="field-textarea" id="s_bio1" rows="3"></textarea></div>
@@ -738,6 +739,7 @@ function updateDashboard(){document.getElementById('dWorks').textContent=state.w
 function fillSettingsForm(){
   const p=state.personal;
   ['brand','name','school','subject','position','email','github','line','subtitle','eyebrow'].forEach(f=>{const el=document.getElementById('s_'+f);if(el)el.value=p[f]||'';});
+  const wu=document.getElementById('s_wishFormUrl');if(wu)wu.value=state.wishFormUrl||'';
   document.getElementById('s_heroTags').value=(state.heroTags||[]).join(', ');
   document.getElementById('s_statWS').value=state.stats.workshops;
   document.getElementById('s_statWK').value=state.stats.works;
@@ -752,6 +754,7 @@ function fillSettingsForm(){
 }
 function saveSettings(){
   ['brand','name','school','subject','position','email','github','line','subtitle','eyebrow'].forEach(f=>{const el=document.getElementById('s_'+f);if(el)state.personal[f]=el.value.trim();});
+  const wu=document.getElementById('s_wishFormUrl');if(wu)state.wishFormUrl=wu.value.trim();
   state.heroTags=document.getElementById('s_heroTags').value.split(',').map(t=>t.trim()).filter(Boolean);
   state.stats={workshops:parseInt(document.getElementById('s_statWS').value)||0,works:parseInt(document.getElementById('s_statWK').value)||0,years:parseInt(document.getElementById('s_statYR').value)||0};
   state.bio=[document.getElementById('s_bio0').value.trim(),document.getElementById('s_bio1').value.trim(),document.getElementById('s_bio2').value.trim()].filter(Boolean);
