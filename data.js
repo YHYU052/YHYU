@@ -1,7 +1,7 @@
 // =====================================================================
 // TECH SQUIDS — 網站資料設定檔 (data.js)
 // 由後台管理介面自動產生
-// 產生時間：2026/4/21 下午3:29:58
+// 產生時間：2026/4/21 下午3:43:59
 // =====================================================================
 
 var SITE_DATA = {
@@ -30,9 +30,9 @@ var SITE_DATA = {
     "電子電路"
   ],
   "bio": [
-    "任職於<strong>新北市柑園國中</strong>，擔任生活科技教師，同時身兼資設組長職務。長期致力於推動<strong>跨域 STEAM 教育</strong>、創客教具設計與 AI 融入教學，也是「<strong>柑園國中棒球隊</strong>」的幕後推手之一。",
-    "研究主軸聚焦於<strong>MAKER教育與教具設計</strong>，盼讓教師於科技領域教學可以更加得心應手。",
-    "研習工作坊風格強調<strong>紮實、豐富、創新</strong>，每一場研習都希望讓學員帶著<strong>明天就能用</strong>的實戰能力與實作成品回家。"
+    "任職於<strong>新北市柑園國中</strong>，擔任生活科技教師，同時身兼資設組長職務。<br/>\n長期致力於推動<strong>跨域 STEAM 教育</strong>、創客教具設計與 AI 融入教學，<br/>\n也是「<strong>柑園國中棒球隊</strong>」的幕後推手之一。",
+    "研究主軸聚焦於<strong>MAKER教育與教具設計</strong>，<br/>\n盼讓教師於科技領域教學可以更加得心應手。",
+    "研習工作坊風格強調<strong>紮實、豐富、創新</strong>。<br/>\n每一場研習都希望讓學員帶著<strong>明天就能用</strong>的實戰能力與實作成品回家。"
   ],
   "skillGroups": [
     {
@@ -73,12 +73,12 @@ var SITE_DATA = {
     {
       "icon": "fa-school",
       "title": "EDUCATIONAL BACKGROUND",
-      "desc": "實踐大學・工業產品設計學系<br/>\n淡江大學・電機工程學系機器人工程碩士班<br/>\n國立臺灣師範大學・科技應用與人力資源發展學系科技與工程教育組碩士班"
+      "desc": "<strong>實踐大學</strong>・工業產品設計學系<br/>\n<strong>淡江大學</strong>・電機工程學系機器人工程碩士班<br/>\n<strong>國立臺灣師範大學</strong>・科技應用與人力資源發展學系科技與工程教育組碩士班"
     },
     {
       "icon": "fa-flask",
-      "title": "RESEARCH FOCUS",
-      "desc": "多感官放大教具（TUI）× 學習動機<br/>ARCS 模型・準實驗設計・ANCOVA"
+      "title": "PAPER PUBLICATION",
+      "desc": "<strong>應用數位製造於電子電路教學之教具設計</strong> (2020)<br/>\n<strong>多感官放大教具對中學學生學習動機之影響研究－以電子電路為例</strong> (2025)"
     },
     {
       "icon": "fa-microchip",
