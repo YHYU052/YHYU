@@ -382,6 +382,7 @@
           <div class="field-group"><div class="field-label">個人英文代號 <span>/ NAME</span></div><input type="text" class="field-input" id="s_name"/></div>
           <div class="field-group"><div class="field-label">學校名稱</div><input type="text" class="field-input" id="s_school"/></div>
           <div class="field-group"><div class="field-label">科目 / 職稱</div><input type="text" class="field-input" id="s_subject"/></div>
+          <div class="field-group"><div class="field-label">職位 / POSITION</div><input type="text" class="field-input" id="s_position" placeholder="教師・行政組長"/></div>
           <div class="field-group"><div class="field-label">Email</div><input type="email" class="field-input" id="s_email"/></div>
           <div class="field-group"><div class="field-label">GitHub 連結</div><input type="text" class="field-input" id="s_github"/></div>
           <div class="field-group"><div class="field-label">LINE 連結</div><input type="text" class="field-input" id="s_line"/></div>
@@ -611,7 +612,7 @@ function updateDashboard(){document.getElementById('dWorks').textContent=state.w
 /* ══ Settings ══ */
 function fillSettingsForm(){
   const p=state.personal;
-  ['brand','name','school','subject','email','github','line','subtitle','eyebrow'].forEach(f=>{const el=document.getElementById('s_'+f);if(el)el.value=p[f]||'';});
+  ['brand','name','school','subject','position','email','github','line','subtitle','eyebrow'].forEach(f=>{const el=document.getElementById('s_'+f);if(el)el.value=p[f]||'';});
   document.getElementById('s_heroTags').value=(state.heroTags||[]).join(', ');
   document.getElementById('s_statWS').value=state.stats.workshops;
   document.getElementById('s_statWK').value=state.stats.works;
@@ -621,7 +622,7 @@ function fillSettingsForm(){
   document.getElementById('s_bio2').value=state.bio[2]||'';
 }
 function saveSettings(){
-  ['brand','name','school','subject','email','github','line','subtitle','eyebrow'].forEach(f=>{const el=document.getElementById('s_'+f);if(el)state.personal[f]=el.value.trim();});
+  ['brand','name','school','subject','position','email','github','line','subtitle','eyebrow'].forEach(f=>{const el=document.getElementById('s_'+f);if(el)state.personal[f]=el.value.trim();});
   state.heroTags=document.getElementById('s_heroTags').value.split(',').map(t=>t.trim()).filter(Boolean);
   state.stats={workshops:parseInt(document.getElementById('s_statWS').value)||0,works:parseInt(document.getElementById('s_statWK').value)||0,years:parseInt(document.getElementById('s_statYR').value)||0};
   state.bio=[document.getElementById('s_bio0').value.trim(),document.getElementById('s_bio1').value.trim(),document.getElementById('s_bio2').value.trim()].filter(Boolean);
