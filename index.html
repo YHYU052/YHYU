@@ -95,9 +95,9 @@
   .nav-overlay{
     display:none;position:fixed;inset:0;z-index:998;
     background:rgba(0,0,0,.7);backdrop-filter:blur(4px);
-    opacity:0;transition:opacity .3s;
+    opacity:0;transition:opacity .3s;pointer-events:none;
   }
-  .nav-overlay.open{opacity:1;}
+  .nav-overlay.open{opacity:1;pointer-events:all;}
 
   /* ── TABLET & MOBILE NAV ── */
   @media(max-width:767px){
@@ -114,7 +114,7 @@
     }
     .nav-links.mobile-open{right:0;}
     .nav-links a{padding:12px 16px;border:1px solid var(--border);font-size:13px;}
-    .nav-overlay{display:block;}
+    .nav-overlay{display:block;pointer-events:none;}
   }
 
   /* ══════════════════════════════════════════
@@ -695,6 +695,7 @@ document.getElementById('timeline').innerHTML=(D.upcoming||[]).map((u,i)=>{
           <div><i class="fa-solid fa-users"></i>限額 ${u.capacity} 人${u.enrolled?` &nbsp;·&nbsp; 已報名 ${u.enrolled} 人`:''}</div>
           <div><i class="fa-solid fa-clock"></i>${u.hours} 小時${u.timeNote?`（${esc(u.timeNote)}）`:''}</div>
         </div>
+        ${u.note?`<div style="margin-top:8px;font-family:var(--fm);font-size:12px;color:var(--gray2);border-left:2px solid var(--border2);padding-left:10px;line-height:1.7;">${esc(u.note)}</div>`:''}
       </div>
       <div class="up-right">
         <div class="up-date-box">

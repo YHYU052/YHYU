@@ -584,6 +584,7 @@
         <div class="form-field"><label class="form-label">日期（或 TBA）</label><input type="text" class="form-input" id="um_day" placeholder="15"/></div>
         <div class="form-field"><label class="form-label">年份</label><input type="text" class="form-input" id="um_year" placeholder="2026" maxlength="4"/></div>
         <div class="form-field span2"><label class="form-label">報名連結（選填）</label><input type="text" class="form-input" id="um_signupUrl" placeholder="https://..."/><div class="form-hint">狀態為 OPEN 時顯示報名按鈕</div></div>
+        <div class="form-field span2"><label class="form-label">說明與備註（選填）</label><textarea class="form-textarea" id="um_note" rows="3" placeholder="課程說明、注意事項、攜帶物品..."></textarea></div>
       </div>
     </div>
     <div class="modal-footer"><button class="btn-cancel" onclick="closeModal('upcomingModal')">取消</button><button class="btn-save" onclick="saveUpcoming()"><i class="fa-solid fa-floppy-disk"></i> 儲存</button></div>
@@ -989,7 +990,7 @@ function openUpcomingModal(idx){
   document.getElementById('upModalTitle').innerHTML=isNew?'新增 <span>場次</span>':'編輯 <span>場次</span>';
   document.getElementById('um_idx').value=isNew?'':idx;
   const u=isNew?{status:'soon',title:'',location:'',capacity:30,enrolled:0,hours:6,timeNote:'',month:'',day:'',year:'2026',signupUrl:''}:state.upcoming[idx];
-  document.getElementById('um_title').value=u.title||'';document.getElementById('um_status').value=u.status||'soon';document.getElementById('um_location').value=u.location||'';document.getElementById('um_capacity').value=u.capacity||'';document.getElementById('um_enrolled').value=u.enrolled||0;document.getElementById('um_hours').value=u.hours||'';document.getElementById('um_timeNote').value=u.timeNote||'';document.getElementById('um_month').value=u.month||'';document.getElementById('um_day').value=u.day||'';document.getElementById('um_year').value=u.year||'';document.getElementById('um_signupUrl').value=u.signupUrl||'';
+  document.getElementById('um_title').value=u.title||'';document.getElementById('um_status').value=u.status||'soon';document.getElementById('um_location').value=u.location||'';document.getElementById('um_capacity').value=u.capacity||'';document.getElementById('um_enrolled').value=u.enrolled||0;document.getElementById('um_hours').value=u.hours||'';document.getElementById('um_timeNote').value=u.timeNote||'';document.getElementById('um_month').value=u.month||'';document.getElementById('um_day').value=u.day||'';document.getElementById('um_year').value=u.year||'';document.getElementById('um_signupUrl').value=u.signupUrl||'';document.getElementById('um_note').value=u.note||'';
   populateStatusSelect();
   document.getElementById('upcomingModal').classList.add('open');document.body.style.overflow='hidden';
 }
@@ -997,7 +998,7 @@ function saveUpcoming(){
   const idx=document.getElementById('um_idx').value;
   const title=document.getElementById('um_title').value.trim();
   if(!title){toast('請輸入場次名稱','error');return;}
-  const obj={id:idx===''?'ws_'+Date.now():state.upcoming[parseInt(idx)].id,status:document.getElementById('um_status').value,title,location:document.getElementById('um_location').value.trim(),capacity:parseInt(document.getElementById('um_capacity').value)||0,enrolled:parseInt(document.getElementById('um_enrolled').value)||0,hours:parseInt(document.getElementById('um_hours').value)||0,timeNote:document.getElementById('um_timeNote').value.trim(),month:document.getElementById('um_month').value.trim().toUpperCase(),day:document.getElementById('um_day').value.trim(),year:document.getElementById('um_year').value.trim(),signupUrl:document.getElementById('um_signupUrl').value.trim()};
+  const obj={id:idx===''?'ws_'+Date.now():state.upcoming[parseInt(idx)].id,status:document.getElementById('um_status').value,title,location:document.getElementById('um_location').value.trim(),capacity:parseInt(document.getElementById('um_capacity').value)||0,enrolled:parseInt(document.getElementById('um_enrolled').value)||0,hours:parseInt(document.getElementById('um_hours').value)||0,timeNote:document.getElementById('um_timeNote').value.trim(),month:document.getElementById('um_month').value.trim().toUpperCase(),day:document.getElementById('um_day').value.trim(),year:document.getElementById('um_year').value.trim(),signupUrl:document.getElementById('um_signupUrl').value.trim(),note:document.getElementById('um_note').value.trim()};
   if(idx==='')state.upcoming.push(obj);else state.upcoming[parseInt(idx)]=obj;
   saveState();renderAll();closeModal('upcomingModal');toast('✓ 場次已儲存','success');
 }
