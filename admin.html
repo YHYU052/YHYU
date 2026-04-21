@@ -355,6 +355,9 @@
           <button class="btn-export" id="btnExport">
             <i class="fa-solid fa-download"></i> 匯出
           </button>
+          <button class="btn-export" style="background:var(--red-b);" onclick="syncDataJs()">
+            <i class="fa-solid fa-rotate"></i> 同步 data.js
+          </button>
         </div>
       </div>
 
@@ -1006,6 +1009,24 @@ function deleteItem(key,idx){const name=state[key][idx].title||'此項目';if(!c
 document.getElementById('btnExport').addEventListener('click',downloadExport);
 function generateDataJs(){return`// =====================================================================\n// TECH SQUIDS — 網站資料設定檔 (data.js)\n// 由後台管理介面自動產生\n// 產生時間：${new Date().toLocaleString('zh-TW')}\n// =====================================================================\n\nvar SITE_DATA = ${JSON.stringify(state,null,2)};\n`;}
 function previewExport(){document.getElementById('exportPreview').textContent=generateDataJs();toast('✓ 已產生預覽','info');}
+
+/* ══ 同步 data.js ══ */
+let _dataJsHandle=null;
+async function syncDataJs(){
+  if(!window.showOpenFilePicker){toast('瀏覽器不支援，請用 Chrome/Edge','error');return;}
+  try{
+    if(!_dataJsHandle){
+      const [h]=await window.showOpenFilePicker({types:[{description:'JavaScript',accept:{'text/javascript':['.js']}}],multiple:false});
+      _dataJsHandle=h;
+    }
+    const perm=await _dataJsHandle.requestPermission({mode:'readwrite'});
+    if(perm!=='granted'){_dataJsHandle=null;toast('請重新選取 data.js','error');return;}
+    const writable=await _dataJsHandle.createWritable();
+    await writable.write(generateDataJs());
+    await writable.close();
+    toast('✓ data.js 已更新！告訴 Claude 推送即可','success');
+  }catch(e){if(e.name!=='AbortError'){_dataJsHandle=null;toast('失敗，請重試','error');}}
+}
 function copyExport(){navigator.clipboard.writeText(generateDataJs()).then(()=>toast('✓ 已複製到剪貼簿','success')).catch(()=>toast('複製失敗，請手動複製','error'));}
 function downloadExport(){const b=new Blob([generateDataJs()],{type:'text/javascript'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='data.js';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(a.href);toast('✓ data.js 已下載，請上傳至 GitHub！','success');}
 
