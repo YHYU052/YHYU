@@ -226,6 +226,16 @@
   .form-hint{font-family:var(--fm);font-size:10px;color:var(--gray2);margin-top:4px;}
   .icon-preview{display:inline-flex;align-items:center;gap:8px;background:var(--card2);border:1px solid var(--border);padding:5px 11px;margin-top:5px;font-family:var(--fm);font-size:12px;color:var(--gray);}
   .icon-preview i{color:var(--red);}
+  .img-upload-wrap{display:flex;gap:12px;align-items:flex-start;}
+  .img-preview-box{width:120px;height:90px;min-width:120px;background:var(--card2);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer;transition:var(--tr);}
+  .img-preview-box:hover{border-color:var(--red);}
+  .img-preview-box img{width:100%;height:100%;object-fit:cover;}
+  .img-placeholder{display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--gray2);font-family:var(--fm);font-size:10px;letter-spacing:1px;}
+  .img-placeholder i{font-size:22px;}
+  .btn-upload{margin-top:6px;width:100%;padding:7px 14px;background:var(--card2);border:1px solid var(--border2);color:var(--gray);font-family:var(--fe);font-size:11px;letter-spacing:2px;cursor:pointer;transition:var(--tr);text-align:center;}
+  .btn-upload:hover{border-color:var(--red);color:var(--red);}
+  .btn-img-clear{margin-top:4px;width:100%;padding:5px;background:transparent;border:1px solid var(--border);color:var(--gray2);font-family:var(--fm);font-size:10px;cursor:pointer;transition:var(--tr);}
+  .btn-img-clear:hover{border-color:var(--red-d);color:var(--red-d);}
 
   @media(max-width:767px){
     .modal-grid{grid-template-columns:1fr;}
@@ -465,7 +475,21 @@
         <div class="form-field"><label class="form-label">參與人數</label><input type="number" class="form-input" id="wm_people" min="1"/></div>
         <div class="form-field"><label class="form-label">時數（小時）</label><input type="number" class="form-input" id="wm_hours" min="1"/></div>
         <div class="form-field"><label class="form-label">Font Awesome 圖示</label><input type="text" class="form-input" id="wm_icon" placeholder="fa-robot"/><div class="form-hint">至 fontawesome.com 搜尋圖示名稱</div><div class="icon-preview"><i id="wm_icon_preview" class="fa-solid fa-robot"></i> 預覽</div></div>
-        <div class="form-field"><label class="form-label">圖片路徑（選填）</label><input type="text" class="form-input" id="wm_image" placeholder="assets/works/ai-2024.jpg"/><div class="form-hint">留空則顯示圖示</div></div>
+        <div class="form-field span2"><label class="form-label">作品圖片（選填）</label>
+          <div class="img-upload-wrap">
+            <div class="img-preview-box" onclick="document.getElementById('wm_image_file').click()">
+              <img id="wm_img_preview" src="" style="display:none;"/>
+              <div class="img-placeholder" id="wm_img_placeholder"><i class="fa-solid fa-image"></i><span>點擊上傳</span></div>
+            </div>
+            <div style="flex:1;">
+              <input type="text" class="form-input" id="wm_image" placeholder="assets/works/ai-2024.jpg" oninput="previewImageFromUrl()"/>
+              <input type="file" id="wm_image_file" accept="image/*" style="display:none" onchange="handleImageUpload(this)"/>
+              <button type="button" class="btn-upload" onclick="document.getElementById('wm_image_file').click()"><i class="fa-solid fa-upload"></i> 上傳圖片</button>
+              <button type="button" class="btn-img-clear" onclick="clearImgPreview()">✕ 清除圖片</button>
+              <div class="form-hint">上傳圖片（轉為 Base64）或輸入路徑，留空則顯示圖示</div>
+            </div>
+          </div>
+        </div>
         <div class="form-field span2"><label class="form-label">卡片簡介</label><textarea class="form-textarea" id="wm_desc" rows="2"></textarea></div>
         <div class="form-field span2"><label class="form-label">詳細說明（彈窗內容）</label><textarea class="form-textarea" id="wm_detail" rows="3"></textarea></div>
         <div class="form-field span2"><label class="form-label">標籤（逗號分隔）</label><input type="text" class="form-input" id="wm_tags" placeholder="ChatGPT, PBL, ARCS"/></div>
@@ -622,8 +646,37 @@ function openWorkModal(idx){
   document.getElementById('wm_idx').value=isNew?'':idx;
   const w=isNew?{title:'',cat:'ai',date:'',people:20,hours:6,icon:'fa-robot',image:'',desc:'',detail:'',tags:[]}:state.works[idx];
   document.getElementById('wm_title').value=w.title||'';document.getElementById('wm_cat').value=w.cat||'ai';document.getElementById('wm_date').value=w.date||'';document.getElementById('wm_people').value=w.people||'';document.getElementById('wm_hours').value=w.hours||'';document.getElementById('wm_icon').value=w.icon||'';document.getElementById('wm_image').value=w.image||'';document.getElementById('wm_desc').value=w.desc||'';document.getElementById('wm_detail').value=w.detail||'';document.getElementById('wm_tags').value=(w.tags||[]).join(', ');
+  document.getElementById('wm_image_file').value='';
+  if(w.image)showImgPreview(w.image);else clearImgPreview();
   updateIconPreview('wm_icon','wm_icon_preview');
   document.getElementById('workModal').classList.add('open');document.body.style.overflow='hidden';
+}
+function handleImageUpload(input){
+  if(!input.files||!input.files[0])return;
+  const file=input.files[0];
+  if(file.size>2*1024*1024){toast('圖片超過 2MB，請選擇較小的檔案','error');return;}
+  const reader=new FileReader();
+  reader.onload=function(e){
+    document.getElementById('wm_image').value=e.target.result;
+    showImgPreview(e.target.result);
+  };
+  reader.readAsDataURL(file);
+}
+function previewImageFromUrl(){
+  const val=document.getElementById('wm_image').value.trim();
+  if(val)showImgPreview(val);else clearImgPreview();
+}
+function showImgPreview(src){
+  const img=document.getElementById('wm_img_preview');
+  img.src=src;img.style.display='block';
+  document.getElementById('wm_img_placeholder').style.display='none';
+}
+function clearImgPreview(){
+  const img=document.getElementById('wm_img_preview');
+  img.src='';img.style.display='none';
+  document.getElementById('wm_img_placeholder').style.display='flex';
+  document.getElementById('wm_image').value='';
+  document.getElementById('wm_image_file').value='';
 }
 function saveWork(){
   const idx=document.getElementById('wm_idx').value;
