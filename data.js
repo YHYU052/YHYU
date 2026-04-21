@@ -1,7 +1,7 @@
 // =====================================================================
 // TECH SQUIDS — 網站資料設定檔 (data.js)
 // 由後台管理介面自動產生
-// 產生時間：2026/4/22 上午7:11:18
+// 產生時間：2026/4/22 上午7:11:50
 // =====================================================================
 
 var SITE_DATA = {
@@ -254,7 +254,7 @@ var SITE_DATA = {
   "workCategories": [
     {
       "value": "maker",
-      "label": "MAKER 教具",
+      "label": "MAKER教具",
       "badge": "badge-maker"
     },
     {
@@ -265,7 +265,12 @@ var SITE_DATA = {
     {
       "value": "IoT",
       "label": "物聯網",
-      "badge": ""
+      "badge": "badge-ai"
+    },
+    {
+      "value": "Tool",
+      "label": "小工具",
+      "badge": "badge-pbl"
     }
   ],
   "wishFormUrl": "https://formspree.io/f/mykldqny"
