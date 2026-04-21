@@ -481,18 +481,49 @@
         <div class="mobile-cards" id="handoutsMobileCards"></div>
       </div>
 
-      <!-- Export -->
+      <!-- Export / GitHub Sync -->
       <div class="tab-page" id="tab-export">
         <div class="sec-hdr">
-          <div><div class="sec-title">匯出 <span>data.js</span></div><div class="sec-sub">下載後上傳至 GitHub 覆蓋原本的 data.js</div></div>
+          <div><div class="sec-title">GitHub <span>同步設定</span></div><div class="sec-sub">設定後即可從後台直接推送，所有裝置自動同步</div></div>
         </div>
-        <div class="export-desc"><i class="fa-solid fa-circle-info" style="color:var(--red);margin-right:8px;"></i>修改完所有內容後，點擊下方「下載 data.js」，將下載的檔案上傳至你的 GitHub Repository（覆蓋原本的 data.js）。GitHub Pages 約 1-2 分鐘後自動更新。</div>
-        <div id="exportPreview" class="export-code">// 按下「產生預覽」查看內容...</div>
-        <div class="export-actions">
-          <button class="btn-copy" onclick="previewExport()"><i class="fa-solid fa-rotate"></i> 產生預覽</button>
-          <button class="btn-copy" onclick="copyExport()"><i class="fa-solid fa-copy"></i> 複製全文</button>
-          <button class="btn-dl" onclick="downloadExport()"><i class="fa-solid fa-download"></i> 下載 data.js</button>
+        <!-- GitHub Settings -->
+        <div style="background:var(--card2);border:1px solid var(--border2);padding:20px;margin-bottom:16px;">
+          <div class="settings-grid" style="margin-bottom:14px;">
+            <div class="field-group span2">
+              <div class="field-label">GitHub Personal Access Token</div>
+              <input type="password" class="field-input" id="gh_token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"/>
+              <div class="field-hint">至 GitHub → Settings → Developer settings → Personal access tokens → 產生 token（勾選 repo 權限）</div>
+            </div>
+            <div class="field-group">
+              <div class="field-label">GitHub 帳號</div>
+              <input type="text" class="field-input" id="gh_owner" placeholder="YHYU052"/>
+            </div>
+            <div class="field-group">
+              <div class="field-label">Repository 名稱</div>
+              <input type="text" class="field-input" id="gh_repo" placeholder="YHYU"/>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+            <button class="btn-save" onclick="saveGhSettings()"><i class="fa-solid fa-floppy-disk"></i> 儲存設定</button>
+            <span id="gh_status" style="font-family:var(--fm);font-size:11px;color:var(--gray);"></span>
+          </div>
         </div>
+        <!-- Push Button -->
+        <button class="btn-save" style="width:100%;padding:16px;font-size:14px;letter-spacing:3px;margin-bottom:16px;" onclick="pushToGitHub()">
+          <i class="fa-brands fa-github"></i>&nbsp; 推送到 GitHub（所有裝置同步）
+        </button>
+        <!-- Manual fallback -->
+        <details style="border:1px solid var(--border);padding:12px;">
+          <summary style="font-family:var(--fm);font-size:11px;color:var(--gray);cursor:pointer;letter-spacing:1px;">手動匯出備用</summary>
+          <div style="margin-top:12px;">
+            <div id="exportPreview" class="export-code">// 按下「產生預覽」查看內容...</div>
+            <div class="export-actions" style="margin-top:8px;">
+              <button class="btn-copy" onclick="previewExport()"><i class="fa-solid fa-rotate"></i> 產生預覽</button>
+              <button class="btn-copy" onclick="copyExport()"><i class="fa-solid fa-copy"></i> 複製全文</button>
+              <button class="btn-dl" onclick="downloadExport()"><i class="fa-solid fa-download"></i> 下載 data.js</button>
+            </div>
+          </div>
+        </details>
       </div>
     </div><!-- /main-content -->
   </div>
@@ -694,7 +725,7 @@ function switchTab(tab){
   document.getElementById(`tab-${tab}`).classList.add('active');
   document.getElementById('topbarTitle').innerHTML=TITLES[tab]||tab;
   if(tab==='settings')fillSettingsForm();
-  if(tab==='export')previewExport();
+  if(tab==='export'){previewExport();loadGhSettings();}
 }
 
 /* ══ Render ══ */
@@ -1009,6 +1040,55 @@ function deleteItem(key,idx){const name=state[key][idx].title||'此項目';if(!c
 document.getElementById('btnExport').addEventListener('click',downloadExport);
 function generateDataJs(){return`// =====================================================================\n// TECH SQUIDS — 網站資料設定檔 (data.js)\n// 由後台管理介面自動產生\n// 產生時間：${new Date().toLocaleString('zh-TW')}\n// =====================================================================\n\nvar SITE_DATA = ${JSON.stringify(state,null,2)};\n`;}
 function previewExport(){document.getElementById('exportPreview').textContent=generateDataJs();toast('✓ 已產生預覽','info');}
+
+/* ══ GitHub Sync ══ */
+function saveGhSettings(){
+  const t=document.getElementById('gh_token').value.trim();
+  const o=document.getElementById('gh_owner').value.trim();
+  const r=document.getElementById('gh_repo').value.trim();
+  if(!t||!o||!r){toast('請填寫所有 GitHub 設定','error');return;}
+  localStorage.setItem('GH_TOKEN',t);
+  localStorage.setItem('GH_OWNER',o);
+  localStorage.setItem('GH_REPO',r);
+  document.getElementById('gh_status').textContent='✓ 已儲存';
+  toast('✓ GitHub 設定已儲存','success');
+}
+function loadGhSettings(){
+  const t=localStorage.getItem('GH_TOKEN')||'';
+  const o=localStorage.getItem('GH_OWNER')||'';
+  const r=localStorage.getItem('GH_REPO')||'';
+  if(t)document.getElementById('gh_token').value=t;
+  if(o)document.getElementById('gh_owner').value=o;
+  if(r)document.getElementById('gh_repo').value=r;
+  if(t&&o&&r)document.getElementById('gh_status').textContent='✓ 已設定';
+}
+async function pushToGitHub(){
+  const token=localStorage.getItem('GH_TOKEN');
+  const owner=localStorage.getItem('GH_OWNER');
+  const repo=localStorage.getItem('GH_REPO');
+  if(!token||!owner||!repo){toast('請先至「匯出設定」填寫 GitHub Token','error');switchTab('export');return;}
+  const btn=event.currentTarget;btn.disabled=true;btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> 推送中...';
+  try{
+    const path='data.js';
+    const apiBase=`https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+    const headers={'Authorization':`token ${token}`,'Content-Type':'application/json'};
+    // Get current SHA
+    const cur=await fetch(apiBase,{headers});
+    if(!cur.ok&&cur.status!==404)throw new Error(`GitHub API 錯誤 ${cur.status}`);
+    const sha=cur.ok?(await cur.json()).sha:undefined;
+    // Push new content
+    const content=btoa(unescape(encodeURIComponent(generateDataJs())));
+    const body={message:'chore: sync data.js from admin',content};
+    if(sha)body.sha=sha;
+    const res=await fetch(apiBase,{method:'PUT',headers,body:JSON.stringify(body)});
+    if(!res.ok){const e=await res.json();throw new Error(e.message||res.status);}
+    toast('✓ 推送成功！約 1-2 分鐘後所有裝置同步','success');
+  }catch(e){
+    toast('推送失敗：'+e.message,'error');
+  }finally{
+    btn.disabled=false;btn.innerHTML='<i class="fa-brands fa-github"></i>&nbsp; 推送到 GitHub（所有裝置同步）';
+  }
+}
 
 /* ══ 同步 data.js ══ */
 let _dataJsHandle=null;
