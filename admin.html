@@ -405,6 +405,14 @@
           </div>
           <div id="infoCardsList"></div>
         </div>
+        <!-- Skill Groups -->
+        <div style="margin-top:28px;">
+          <div class="sec-hdr" style="margin-bottom:12px;">
+            <div><div class="sec-title" style="font-size:14px;">專長標籤 <span>SKILL GROUPS</span></div><div class="sec-sub">關於頁面的技能分組與標籤</div></div>
+            <button class="btn-add" onclick="openSkillGroupModal()"><i class="fa-solid fa-plus"></i> 新增</button>
+          </div>
+          <div id="skillGroupsList"></div>
+        </div>
       </div>
 
       <!-- Works -->
@@ -554,6 +562,21 @@
   </div>
 </div>
 
+<!-- ══ Skill Group Modal ══ -->
+<div class="modal-overlay" id="skillGroupModal">
+  <div class="modal-box">
+    <div class="modal-hdr"><div class="modal-hdr-title" id="sgmTitle">新增 <span>技能組</span></div><button class="modal-close" onclick="closeModal('skillGroupModal')"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="modal-body">
+      <input type="hidden" id="sgm_idx"/>
+      <div class="modal-grid">
+        <div class="form-field span2"><label class="form-label">組別標題 <em>*</em></label><input type="text" class="form-input" id="sgm_label" placeholder="// TEACHING &amp; RESEARCH"/></div>
+        <div class="form-field span2"><label class="form-label">標籤（逗號分隔）<em>*</em></label><textarea class="form-textarea" id="sgm_tags" rows="3" placeholder="ARCS 動機模型, PBL, CLIL 雙語"></textarea><div class="form-hint">用逗號「,」分隔每個標籤</div></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn-cancel" onclick="closeModal('skillGroupModal')">取消</button><button class="btn-save" onclick="saveSkillGroup()"><i class="fa-solid fa-floppy-disk"></i> 儲存</button></div>
+  </div>
+</div>
+
 <!-- ══ Info Card Modal ══ -->
 <div class="modal-overlay" id="infoCardModal">
   <div class="modal-box">
@@ -629,7 +652,7 @@ function switchTab(tab){
 }
 
 /* ══ Render ══ */
-function renderAll(){updateBadges();updateDashboard();renderWorksTable();renderUpcomingTable();renderHandoutsTable();renderInfoCardsList();}
+function renderAll(){updateBadges();updateDashboard();renderWorksTable();renderUpcomingTable();renderHandoutsTable();renderInfoCardsList();renderSkillGroupsList();}
 function updateBadges(){document.getElementById('badgeWorks').textContent=state.works.length;document.getElementById('badgeUpcoming').textContent=state.upcoming.length;document.getElementById('badgeHandouts').textContent=state.handouts.length;}
 function updateDashboard(){document.getElementById('dWorks').textContent=state.works.length;document.getElementById('dUpcoming').textContent=state.upcoming.length;document.getElementById('dHandouts').textContent=state.handouts.length;document.getElementById('dOpenWS').textContent=state.upcoming.filter(u=>u.status==='open').length;}
 
@@ -645,6 +668,7 @@ function fillSettingsForm(){
   document.getElementById('s_bio1').value=state.bio[1]||'';
   document.getElementById('s_bio2').value=state.bio[2]||'';
   renderInfoCardsList();
+  renderSkillGroupsList();
 }
 function saveSettings(){
   ['brand','name','school','subject','position','email','github','line','subtitle','eyebrow'].forEach(f=>{const el=document.getElementById('s_'+f);if(el)state.personal[f]=el.value.trim();});
@@ -652,6 +676,49 @@ function saveSettings(){
   state.stats={workshops:parseInt(document.getElementById('s_statWS').value)||0,works:parseInt(document.getElementById('s_statWK').value)||0,years:parseInt(document.getElementById('s_statYR').value)||0};
   state.bio=[document.getElementById('s_bio0').value.trim(),document.getElementById('s_bio1').value.trim(),document.getElementById('s_bio2').value.trim()].filter(Boolean);
   saveState();toast('✓ 個人設定已儲存','success');
+}
+
+/* ══ Skill Groups ══ */
+function renderSkillGroupsList(){
+  const list=document.getElementById('skillGroupsList');if(!list)return;
+  const groups=state.skillGroups||[];
+  if(!groups.length){list.innerHTML='<div style="color:var(--gray);font-family:var(--fm);font-size:12px;padding:12px 0;">尚無資料</div>';return;}
+  list.innerHTML=groups.map((g,i)=>`
+    <div style="padding:10px 14px;background:var(--card2);border:1px solid var(--border);margin-bottom:6px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+        <div style="font-family:var(--fe);font-size:12px;letter-spacing:2px;color:var(--red);">${esc(g.label)}</div>
+        <div class="row-actions">
+          <button class="btn-up" onclick="moveItem('skillGroups',${i},-1)"><i class="fa-solid fa-chevron-up"></i></button>
+          <button class="btn-dn" onclick="moveItem('skillGroups',${i},1)"><i class="fa-solid fa-chevron-down"></i></button>
+          <button class="btn-edit" onclick="openSkillGroupModal(${i})">編輯</button>
+          <button class="btn-del" onclick="deleteSkillGroup(${i})"><i class="fa-solid fa-trash"></i></button>
+        </div>
+      </div>
+      <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:5px;">${(g.tags||[]).map(t=>`<span style="font-family:var(--fm);font-size:11px;padding:2px 8px;border:1px solid var(--border2);color:var(--gray);">${esc(t)}</span>`).join('')}</div>
+    </div>`).join('');
+}
+function openSkillGroupModal(idx){
+  const isNew=idx===undefined;
+  document.getElementById('sgmTitle').innerHTML=isNew?'新增 <span>技能組</span>':'編輯 <span>技能組</span>';
+  document.getElementById('sgm_idx').value=isNew?'':idx;
+  const g=isNew?{label:'',tags:[]}:(state.skillGroups||[])[idx]||{};
+  document.getElementById('sgm_label').value=g.label||'';
+  document.getElementById('sgm_tags').value=(g.tags||[]).join(', ');
+  document.getElementById('skillGroupModal').classList.add('open');document.body.style.overflow='hidden';
+}
+function saveSkillGroup(){
+  const idx=document.getElementById('sgm_idx').value;
+  const label=document.getElementById('sgm_label').value.trim();
+  if(!label){toast('請輸入標題','error');return;}
+  const tags=document.getElementById('sgm_tags').value.split(',').map(t=>t.trim()).filter(Boolean);
+  const obj={label,tags};
+  if(!state.skillGroups)state.skillGroups=[];
+  if(idx==='')state.skillGroups.push(obj);else state.skillGroups[parseInt(idx)]=obj;
+  saveState();renderSkillGroupsList();closeModal('skillGroupModal');toast('✓ 技能組已儲存','success');
+}
+function deleteSkillGroup(idx){
+  if(!confirm('確定刪除此技能組？'))return;
+  state.skillGroups.splice(idx,1);saveState();renderSkillGroupsList();toast('已刪除','success');
 }
 
 /* ══ Info Cards ══ */
