@@ -218,6 +218,7 @@ var SITE_DATA = {
       "icon": "fa-clock",
       "password": "XX0417CLOCK",
       "url": "https://drive.google.com/drive/folders/1kaAFEuOnkrSyE-vXctQvaR8mxbHdnwNT?usp=drive_link",
+      "cat": "handout",
       "tags": [
         "LED時鐘",
         "台北新興"
@@ -233,6 +234,7 @@ var SITE_DATA = {
       "icon": "fa-music",
       "password": "GFSPEAKER",
       "url": "https://drive.google.com/drive/folders/1LSPcgICDiEXSI4mU0dTjPTctTxhGimYI?usp=drive_link",
+      "cat": "handout",
       "tags": [
         "音頻放大器",
         "花蓮光復"
@@ -273,5 +275,10 @@ var SITE_DATA = {
       "badge": "badge-pbl"
     }
   ],
-  "wishFormUrl": "https://formspree.io/f/mykldqny"
+  "wishFormUrl": "https://formspree.io/f/mykldqny",
+
+  "fileCategories": [
+    {"value":"handout", "label":"研習講義", "badge":"badge-pbl"},
+    {"value":"share",   "label":"檔案分享", "badge":"badge-ai"}
+  ]
 };

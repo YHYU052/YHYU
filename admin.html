@@ -327,7 +327,7 @@
         <div class="nav-item" data-tab="settings"><i class="fa-solid fa-sliders"></i><span>個人設定</span></div>
         <div class="nav-item" data-tab="works"><i class="fa-solid fa-layer-group"></i><span>研習作品</span><span class="nav-badge" id="badgeWorks">0</span></div>
         <div class="nav-item" data-tab="upcoming"><i class="fa-solid fa-calendar-days"></i><span>即將開課</span><span class="nav-badge" id="badgeUpcoming">0</span></div>
-        <div class="nav-item" data-tab="handouts"><i class="fa-solid fa-file-pdf"></i><span>講義下載</span><span class="nav-badge" id="badgeHandouts">0</span></div>
+        <div class="nav-item" data-tab="handouts"><i class="fa-solid fa-file-pdf"></i><span>檔案下載</span><span class="nav-badge" id="badgeHandouts">0</span></div>
         <div class="nav-section-label">工具</div>
         <div class="nav-item" data-tab="export"><i class="fa-solid fa-file-export"></i><span>匯出設定</span></div>
       </nav>
@@ -366,7 +366,7 @@
         <div class="dash-grid">
           <div class="dash-card"><div class="dash-num" id="dWorks">0</div><div class="dash-label">研習作品</div><div class="dash-sub">WORKS</div></div>
           <div class="dash-card"><div class="dash-num" id="dUpcoming">0</div><div class="dash-label">預告場次</div><div class="dash-sub">UPCOMING</div></div>
-          <div class="dash-card"><div class="dash-num" id="dHandouts">0</div><div class="dash-label">講義下載</div><div class="dash-sub">HANDOUTS</div></div>
+          <div class="dash-card"><div class="dash-num" id="dHandouts">0</div><div class="dash-label">檔案下載</div><div class="dash-sub">HANDOUTS</div></div>
           <div class="dash-card"><div class="dash-num" id="dOpenWS">0</div><div class="dash-label">開放報名</div><div class="dash-sub">OPEN NOW</div></div>
         </div>
         <div class="tips-box">
@@ -433,6 +433,14 @@
           </div>
           <div id="statusesList"></div>
         </div>
+        <!-- File Categories -->
+        <div style="margin-top:28px;">
+          <div class="sec-hdr" style="margin-bottom:12px;">
+            <div><div class="sec-title" style="font-size:14px;">檔案類別 <span>FILE CATS</span></div><div class="sec-sub">檔案下載區的分類標籤</div></div>
+            <button class="btn-add" onclick="openCatStatusModal('fileCat')"><i class="fa-solid fa-plus"></i> 新增</button>
+          </div>
+          <div id="fileCatsList"></div>
+        </div>
       </div>
 
       <!-- Works -->
@@ -470,12 +478,12 @@
       <!-- Handouts -->
       <div class="tab-page" id="tab-handouts">
         <div class="sec-hdr">
-          <div><div class="sec-title">講義 <span>下載</span></div><div class="sec-sub">各份講義的獨立密碼與檔案路徑</div></div>
+          <div><div class="sec-title">檔案 <span>下載</span></div><div class="sec-sub">各份檔案的類別、密碼與下載路徑</div></div>
           <button class="btn-add" onclick="openHandoutModal()"><i class="fa-solid fa-plus"></i> 新增</button>
         </div>
         <div class="table-wrap">
           <table class="data-table">
-            <thead><tr><th>標題</th><th>格式/大小</th><th>密碼</th><th>路徑</th><th>操作</th></tr></thead>
+            <thead><tr><th>標題</th><th>類別</th><th>格式/大小</th><th>密碼</th><th>操作</th></tr></thead>
             <tbody id="handoutsTbody"></tbody>
           </table>
         </div>
@@ -595,11 +603,12 @@
 <!-- ══ Handout Modal ══ -->
 <div class="modal-overlay" id="handoutModal">
   <div class="modal-box">
-    <div class="modal-hdr"><div class="modal-hdr-title" id="hmTitle">新增 <span>講義</span></div><button class="modal-close" onclick="closeModal('handoutModal')"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="modal-hdr"><div class="modal-hdr-title" id="hmTitle">新增 <span>檔案</span></div><button class="modal-close" onclick="closeModal('handoutModal')"><i class="fa-solid fa-xmark"></i></button></div>
     <div class="modal-body">
       <input type="hidden" id="hm_idx"/>
       <div class="modal-grid">
-        <div class="form-field span2"><label class="form-label">講義名稱 <em>*</em></label><input type="text" class="form-input" id="hm_title"/></div>
+        <div class="form-field span2"><label class="form-label">檔案名稱 <em>*</em></label><input type="text" class="form-input" id="hm_title"/></div>
+        <div class="form-field span2"><label class="form-label">類別 <em>*</em></label><select class="form-select" id="hm_cat"></select></div>
         <div class="form-field"><label class="form-label">日期</label><input type="text" class="form-input" id="hm_date" placeholder="2025 / 06"/></div>
         <div class="form-field"><label class="form-label">格式</label><input type="text" class="form-input" id="hm_format" placeholder="PDF"/></div>
         <div class="form-field"><label class="form-label">檔案大小</label><input type="text" class="form-input" id="hm_size" placeholder="3.2 MB"/></div>
@@ -670,9 +679,11 @@ const ADMIN_PASSWORD = 'Yhyu0052'; // ← 修改後台密碼
 
 const DEFAULT_CATS=[{value:'ai',label:'AI 融入',badge:'badge-ai'},{value:'maker',label:'MAKER 教具',badge:'badge-maker'},{value:'pbl',label:'PBL 設計',badge:'badge-pbl'},{value:'info',label:'資訊科技',badge:'badge-info'}];
 const DEFAULT_STATUSES=[{value:'open',label:'OPEN 報名中',badge:'badge-open'},{value:'soon',label:'SOON 即將開放',badge:'badge-soon'},{value:'full',label:'FULL 已額滿',badge:'badge-full'}];
+const DEFAULT_FILE_CATS=[{value:'handout',label:'研習講義',badge:'badge-pbl'},{value:'share',label:'檔案分享',badge:'badge-ai'}];
 const BADGE_OPTIONS=[{v:'badge-ai',l:'藍'},{v:'badge-maker',l:'紅'},{v:'badge-pbl',l:'綠'},{v:'badge-info',l:'黃'},{v:'badge-full',l:'灰'}];
 function getCats(){return state.workCategories||DEFAULT_CATS;}
 function getStatuses(){return state.upcomingStatuses||DEFAULT_STATUSES;}
+function getFileCats(){return state.fileCategories||DEFAULT_FILE_CATS;}
 let CAT_MAP={}, STATUS_MAP={};
 function rebuildMaps(){
   CAT_MAP={};getCats().forEach(c=>CAT_MAP[c.value]={label:c.label,badge:c.badge||'badge-info'});
@@ -680,7 +691,8 @@ function rebuildMaps(){
 }
 function populateWorkCatSelect(){const s=document.getElementById('wm_cat');const cur=s.value;s.innerHTML=getCats().map(c=>`<option value="${esc(c.value)}">${esc(c.label)}</option>`).join('');s.value=cur||getCats()[0]?.value||'';}
 function populateStatusSelect(){const s=document.getElementById('um_status');const cur=s.value;s.innerHTML=getStatuses().map(c=>`<option value="${esc(c.value)}">${esc(c.label)}</option>`).join('');s.value=cur||getStatuses()[0]?.value||'';}
-const TITLES={dashboard:'DASH<span>BOARD</span>',settings:'個人<span>設定</span>',works:'研習<span>作品</span>',upcoming:'即將<span>開課</span>',handouts:'講義<span>下載</span>',export:'匯出 <span>data.js</span>'};
+function populateHandoutCatSelect(cur){const s=document.getElementById('hm_cat');s.innerHTML=getFileCats().map(c=>`<option value="${esc(c.value)}">${esc(c.label)}</option>`).join('');s.value=cur||getFileCats()[0]?.value||'';}
+const TITLES={dashboard:'DASH<span>BOARD</span>',settings:'個人<span>設定</span>',works:'研習<span>作品</span>',upcoming:'即將<span>開課</span>',handouts:'檔案<span>下載</span>',export:'匯出 <span>data.js</span>'};
 
 /* ══ State ══ */
 let state={};
@@ -731,7 +743,7 @@ function switchTab(tab){
 }
 
 /* ══ Render ══ */
-function renderAll(){rebuildMaps();updateBadges();updateDashboard();renderWorksTable();renderUpcomingTable();renderHandoutsTable();renderInfoCardsList();renderSkillGroupsList();renderCatsList();renderStatusesList();}
+function renderAll(){rebuildMaps();updateBadges();updateDashboard();renderWorksTable();renderUpcomingTable();renderHandoutsTable();renderInfoCardsList();renderSkillGroupsList();renderCatsList();renderStatusesList();renderFileCatsList();}
 function updateBadges(){document.getElementById('badgeWorks').textContent=state.works.length;document.getElementById('badgeUpcoming').textContent=state.upcoming.length;document.getElementById('badgeHandouts').textContent=state.handouts.length;}
 function updateDashboard(){document.getElementById('dWorks').textContent=state.works.length;document.getElementById('dUpcoming').textContent=state.upcoming.length;document.getElementById('dHandouts').textContent=state.handouts.length;document.getElementById('dOpenWS').textContent=state.upcoming.filter(u=>u.status==='open').length;}
 
@@ -751,6 +763,7 @@ function fillSettingsForm(){
   renderSkillGroupsList();
   renderCatsList();
   renderStatusesList();
+  renderFileCatsList();
 }
 function saveSettings(){
   ['brand','name','school','subject','position','email','github','line','subtitle','eyebrow'].forEach(f=>{const el=document.getElementById('s_'+f);if(el)state.personal[f]=el.value.trim();});
@@ -792,19 +805,36 @@ function renderStatusesList(){
       </div>
     </div>`).join('');
 }
+function renderFileCatsList(){
+  const el=document.getElementById('fileCatsList');if(!el)return;
+  const arr=getFileCats();
+  el.innerHTML=arr.map((c,i)=>`
+    <div style="display:flex;align-items:center;gap:12px;padding:8px 14px;background:var(--card2);border:1px solid var(--border);margin-bottom:6px;">
+      <span class="td-badge ${c.badge||'badge-pbl'}">${esc(c.label)}</span>
+      <span style="font-family:var(--fm);font-size:11px;color:var(--gray2);">${esc(c.value)}</span>
+      <div class="row-actions" style="margin-left:auto;">
+        <button class="btn-up" onclick="moveCatStatus('fileCat',${i},-1)"><i class="fa-solid fa-chevron-up"></i></button>
+        <button class="btn-dn" onclick="moveCatStatus('fileCat',${i},1)"><i class="fa-solid fa-chevron-down"></i></button>
+        <button class="btn-edit" onclick="openCatStatusModal('fileCat',${i})">編輯</button>
+        <button class="btn-del" onclick="deleteCatStatus('fileCat',${i})"><i class="fa-solid fa-trash"></i></button>
+      </div>
+    </div>`).join('');
+}
 function openCatStatusModal(type,idx){
   const isNew=idx===undefined;
   const isCat=type==='cat';
-  document.getElementById('csmTitle').innerHTML=isNew?`新增 <span>${isCat?'類別':'狀態'}</span>`:`編輯 <span>${isCat?'類別':'狀態'}</span>`;
+  const typeLabel=type==='cat'?'類別':type==='status'?'狀態':'檔案類別';
+  document.getElementById('csmTitle').innerHTML=isNew?`新增 <span>${typeLabel}</span>`:`編輯 <span>${typeLabel}</span>`;
   document.getElementById('csm_type').value=type;
   document.getElementById('csm_idx').value=isNew?'':idx;
-  const arr=isCat?getCats():getStatuses();
-  const obj=isNew?{value:'',label:'',badge:isCat?'badge-info':'badge-soon'}:arr[idx]||{};
+  const arr=type==='cat'?getCats():type==='status'?getStatuses():getFileCats();
+  const defBadge=type==='status'?'badge-soon':type==='fileCat'?'badge-pbl':'badge-info';
+  const obj=isNew?{value:'',label:'',badge:defBadge}:arr[idx]||{};
   document.getElementById('csm_value').value=obj.value||'';
   document.getElementById('csm_label').value=obj.label||'';
   const badgeSel=document.getElementById('csm_badge');
   badgeSel.innerHTML=BADGE_OPTIONS.map(b=>`<option value="${b.v}">${b.l}</option>`).join('');
-  badgeSel.value=obj.badge||(isCat?'badge-info':'badge-soon');
+  badgeSel.value=obj.badge||defBadge;
   document.getElementById('catStatusModal').classList.add('open');document.body.style.overflow='hidden';
 }
 function saveCatStatus(){
@@ -814,20 +844,23 @@ function saveCatStatus(){
   const label=document.getElementById('csm_label').value.trim();
   if(!value||!label){toast('請填入識別碼與名稱','error');return;}
   const obj={value,label,badge:document.getElementById('csm_badge').value};
-  const key=type==='cat'?'workCategories':'upcomingStatuses';
-  if(!state[key])state[key]=type==='cat'?[...DEFAULT_CATS]:[...DEFAULT_STATUSES];
+  const key=type==='cat'?'workCategories':type==='status'?'upcomingStatuses':'fileCategories';
+  const def=type==='cat'?[...DEFAULT_CATS]:type==='status'?[...DEFAULT_STATUSES]:[...DEFAULT_FILE_CATS];
+  if(!state[key])state[key]=def;
   if(idx==='')state[key].push(obj);else state[key][parseInt(idx)]=obj;
   saveState();rebuildMaps();renderAll();closeModal('catStatusModal');toast('✓ 已儲存','success');
 }
 function deleteCatStatus(type,idx){
   if(!confirm('確定刪除？'))return;
-  const key=type==='cat'?'workCategories':'upcomingStatuses';
-  if(!state[key])state[key]=type==='cat'?[...DEFAULT_CATS]:[...DEFAULT_STATUSES];
+  const key=type==='cat'?'workCategories':type==='status'?'upcomingStatuses':'fileCategories';
+  const def=type==='cat'?[...DEFAULT_CATS]:type==='status'?[...DEFAULT_STATUSES]:[...DEFAULT_FILE_CATS];
+  if(!state[key])state[key]=def;
   state[key].splice(idx,1);saveState();rebuildMaps();renderAll();toast('已刪除','success');
 }
 function moveCatStatus(type,idx,dir){
-  const key=type==='cat'?'workCategories':'upcomingStatuses';
-  if(!state[key])state[key]=type==='cat'?[...DEFAULT_CATS]:[...DEFAULT_STATUSES];
+  const key=type==='cat'?'workCategories':type==='status'?'upcomingStatuses':'fileCategories';
+  const def=type==='cat'?[...DEFAULT_CATS]:type==='status'?[...DEFAULT_STATUSES]:[...DEFAULT_FILE_CATS];
+  if(!state[key])state[key]=def;
   const arr=state[key];const ni=idx+dir;if(ni<0||ni>=arr.length)return;
   [arr[idx],arr[ni]]=[arr[ni],arr[idx]];saveState();rebuildMaps();renderAll();
 }
@@ -1012,16 +1045,18 @@ function saveUpcoming(){
 function renderHandoutsTable(){
   const tbody=document.getElementById('handoutsTbody');
   const cards=document.getElementById('handoutsMobileCards');
+  const fileCatMap={};getFileCats().forEach(c=>fileCatMap[c.value]={label:c.label,badge:c.badge||'badge-pbl'});
   if(!state.handouts.length){tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--gray);padding:28px;font-family:var(--fm);font-size:12px;">尚無資料</td></tr>';cards.innerHTML='<div style="text-align:center;color:var(--gray);padding:28px;font-family:var(--fm);font-size:12px;">尚無資料</div>';return;}
-  tbody.innerHTML=state.handouts.map((h,i)=>`<tr><td><div class="td-title">${esc(h.title)}</div><div class="td-sub">${esc(h.date)}</div></td><td><span style="font-family:var(--fm);font-size:11px;color:var(--gray)">${esc(h.format)} · ${esc(h.size)}</span></td><td><code style="font-family:var(--fm);font-size:12px;background:var(--card2);border:1px solid var(--border);padding:2px 7px;color:var(--red);">${esc(h.password)}</code></td><td><span style="font-family:var(--fm);font-size:11px;color:var(--gray);word-break:break-all;">${esc(h.url)}</span></td><td><div class="row-actions"><button class="btn-up" onclick="moveItem('handouts',${i},-1)"><i class="fa-solid fa-chevron-up"></i></button><button class="btn-dn" onclick="moveItem('handouts',${i},1)"><i class="fa-solid fa-chevron-down"></i></button><button class="btn-edit" onclick="openHandoutModal(${i})">編輯</button><button class="btn-del" onclick="deleteItem('handouts',${i})"><i class="fa-solid fa-trash"></i></button></div></td></tr>`).join('');
-  cards.innerHTML=state.handouts.map((h,i)=>`<div class="mobile-card"><div class="mc-title">${esc(h.title)}</div><div class="mc-meta"><span style="color:var(--gray)">${esc(h.date)}</span><code style="font-family:var(--fm);font-size:11px;background:var(--card2);border:1px solid var(--border);padding:1px 6px;color:var(--red);">${esc(h.password)}</code><span style="color:var(--gray);font-family:var(--fm);font-size:11px;">${esc(h.url)}</span></div><div class="mc-actions"><button class="btn-up" onclick="moveItem('handouts',${i},-1)"><i class="fa-solid fa-arrow-up"></i></button><button class="btn-dn" onclick="moveItem('handouts',${i},1)"><i class="fa-solid fa-arrow-down"></i></button><button class="btn-edit" onclick="openHandoutModal(${i})">編輯</button><button class="btn-del" onclick="deleteItem('handouts',${i})"><i class="fa-solid fa-trash"></i></button></div></div>`).join('');
+  tbody.innerHTML=state.handouts.map((h,i)=>{const fc=fileCatMap[h.cat]||{label:h.cat||'—',badge:'badge-info'};return`<tr><td><div class="td-title">${esc(h.title)}</div><div class="td-sub">${esc(h.date)}</div></td><td><span class="td-badge ${fc.badge}">${esc(fc.label)}</span></td><td><span style="font-family:var(--fm);font-size:11px;color:var(--gray)">${esc(h.format)} · ${esc(h.size)}</span></td><td><code style="font-family:var(--fm);font-size:12px;background:var(--card2);border:1px solid var(--border);padding:2px 7px;color:var(--red);">${esc(h.password)}</code></td><td><div class="row-actions"><button class="btn-up" onclick="moveItem('handouts',${i},-1)"><i class="fa-solid fa-chevron-up"></i></button><button class="btn-dn" onclick="moveItem('handouts',${i},1)"><i class="fa-solid fa-chevron-down"></i></button><button class="btn-edit" onclick="openHandoutModal(${i})">編輯</button><button class="btn-del" onclick="deleteItem('handouts',${i})"><i class="fa-solid fa-trash"></i></button></div></td></tr>`;}).join('');
+  cards.innerHTML=state.handouts.map((h,i)=>{const fc=fileCatMap[h.cat]||{label:h.cat||'—',badge:'badge-info'};return`<div class="mobile-card"><div class="mc-title">${esc(h.title)}</div><div class="mc-meta"><span class="td-badge ${fc.badge}">${esc(fc.label)}</span><span style="color:var(--gray)">${esc(h.date)}</span><code style="font-family:var(--fm);font-size:11px;background:var(--card2);border:1px solid var(--border);padding:1px 6px;color:var(--red);">${esc(h.password)}</code></div><div class="mc-actions"><button class="btn-up" onclick="moveItem('handouts',${i},-1)"><i class="fa-solid fa-arrow-up"></i></button><button class="btn-dn" onclick="moveItem('handouts',${i},1)"><i class="fa-solid fa-arrow-down"></i></button><button class="btn-edit" onclick="openHandoutModal(${i})">編輯</button><button class="btn-del" onclick="deleteItem('handouts',${i})"><i class="fa-solid fa-trash"></i></button></div></div>`;}).join('');
 }
 function openHandoutModal(idx){
   const isNew=idx===undefined;
-  document.getElementById('hmTitle').innerHTML=isNew?'新增 <span>講義</span>':'編輯 <span>講義</span>';
+  document.getElementById('hmTitle').innerHTML=isNew?'新增 <span>檔案</span>':'編輯 <span>檔案</span>';
   document.getElementById('hm_idx').value=isNew?'':idx;
-  const h=isNew?{title:'',date:'',format:'PDF',size:'',desc:'',icon:'fa-file-pdf',password:'',url:'',tags:[]}:state.handouts[idx];
+  const h=isNew?{title:'',cat:'',date:'',format:'PDF',size:'',desc:'',icon:'fa-file-pdf',password:'',url:'',tags:[]}:state.handouts[idx];
   document.getElementById('hm_title').value=h.title||'';document.getElementById('hm_date').value=h.date||'';document.getElementById('hm_format').value=h.format||'PDF';document.getElementById('hm_size').value=h.size||'';document.getElementById('hm_desc').value=h.desc||'';document.getElementById('hm_icon').value=h.icon||'fa-file-pdf';document.getElementById('hm_password').value=h.password||'';document.getElementById('hm_url').value=h.url||'';document.getElementById('hm_tags').value=(h.tags||[]).join(', ');
+  populateHandoutCatSelect(h.cat);
   updateIconPreview('hm_icon','hm_icon_preview');
   document.getElementById('handoutModal').classList.add('open');document.body.style.overflow='hidden';
 }
@@ -1033,9 +1068,9 @@ function saveHandout(){
   if(!title){toast('請輸入講義名稱','error');return;}
   if(!pw){toast('請設定密碼','error');return;}
   if(!url){toast('請填入檔案路徑','error');return;}
-  const obj={id:idx===''?'hl_'+Date.now():state.handouts[parseInt(idx)].id,title,date:document.getElementById('hm_date').value.trim(),format:document.getElementById('hm_format').value.trim()||'PDF',size:document.getElementById('hm_size').value.trim(),desc:document.getElementById('hm_desc').value.trim(),icon:document.getElementById('hm_icon').value.trim()||'fa-file-pdf',password:pw,url,tags:document.getElementById('hm_tags').value.split(',').map(t=>t.trim()).filter(Boolean)};
+  const obj={id:idx===''?'hl_'+Date.now():state.handouts[parseInt(idx)].id,title,cat:document.getElementById('hm_cat').value,date:document.getElementById('hm_date').value.trim(),format:document.getElementById('hm_format').value.trim()||'PDF',size:document.getElementById('hm_size').value.trim(),desc:document.getElementById('hm_desc').value.trim(),icon:document.getElementById('hm_icon').value.trim()||'fa-file-pdf',password:pw,url,tags:document.getElementById('hm_tags').value.split(',').map(t=>t.trim()).filter(Boolean)};
   if(idx==='')state.handouts.push(obj);else state.handouts[parseInt(idx)]=obj;
-  saveState();renderAll();closeModal('handoutModal');toast('✓ 講義已儲存','success');
+  saveState();renderAll();closeModal('handoutModal');toast('✓ 檔案已儲存','success');
 }
 
 /* ══ Common ══ */

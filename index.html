@@ -554,13 +554,14 @@
 <!-- ══ DOWNLOADS ══ -->
 <section id="downloads">
   <div class="container">
-    <p class="section-label fade-up">// HANDOUTS</p>
-    <h2 class="section-title fade-up">講義 <span>下載</span></h2>
+    <p class="section-label fade-up">// FILES</p>
+    <h2 class="section-title fade-up">檔案 <span>下載</span></h2>
     <div class="divider fade-up"></div>
     <div class="dl-notice fade-up">
       <i class="fa-solid fa-lock"></i>
-      <div>每份講義設有<strong style="color:var(--white)">獨立密碼</strong>，請於研習現場或由講師提供。密碼區分大小寫，若有問題請聯絡：<strong style="color:var(--red)" id="dlEmail"></strong></div>
+      <div>每份檔案設有<strong style="color:var(--white)">獨立密碼</strong>，請於研習現場或由講師提供。密碼區分大小寫，若有問題請聯絡：<strong style="color:var(--red)" id="dlEmail"></strong></div>
     </div>
+    <div class="works-filter" id="dlFilter" style="margin-bottom:20px;"></div>
     <div class="dl-grid" id="dlGrid"></div>
   </div>
 </section>
@@ -761,14 +762,22 @@ document.getElementById('timeline').innerHTML=(D.upcoming||[]).map((u,i)=>{
 renderUpcoming();
 
 /* ══════════════ Handouts ══════════════ */
+const FILE_CAT_MAP={};
+function buildFileCatMap(){Object.keys(FILE_CAT_MAP).forEach(k=>delete FILE_CAT_MAP[k]);(D.fileCategories||[{value:'handout',label:'研習講義'},{value:'share',label:'檔案分享'}]).forEach(c=>FILE_CAT_MAP[c.value]={label:c.label,badge:c.badge||'badge-pbl'});}
+buildFileCatMap();
+
 function renderHandouts(){
-document.getElementById('dlGrid').innerHTML=(D.handouts||[]).map(h=>`
-  <div class="dl-card fade-up">
+  buildFileCatMap();
+  const fileCats=['all',...new Set((D.handouts||[]).map(h=>h.cat).filter(Boolean))];
+  document.getElementById('dlFilter').innerHTML=
+    fileCats.map((c,i)=>`<button class="filter-btn${i===0?' active':''}" data-fcat="${c}">${c==='all'?'ALL':(FILE_CAT_MAP[c]?.label||c)}</button>`).join('');
+  document.getElementById('dlGrid').innerHTML=(D.handouts||[]).map(h=>`
+  <div class="dl-card fade-up" data-fcat="${esc(h.cat||'')}">
     <div class="dl-card-top">
       <div class="dl-icon"><i class="fa-solid ${esc(h.icon||'fa-file-pdf')}"></i></div>
       <div class="dl-info">
         <div class="dl-title">${esc(h.title)}</div>
-        <div class="dl-meta">${esc(h.date)} · ${esc(h.format)} · ${esc(h.size)}</div>
+        <div class="dl-meta">${h.cat&&FILE_CAT_MAP[h.cat]?`<span class="td-badge ${FILE_CAT_MAP[h.cat].badge}" style="font-size:10px;padding:1px 7px;margin-right:6px;">${FILE_CAT_MAP[h.cat].label}</span>`:''} ${esc(h.date)} · ${esc(h.format)} · ${esc(h.size)}</div>
       </div>
     </div>
     <div class="dl-desc">${esc(h.desc)}</div>
@@ -777,6 +786,13 @@ document.getElementById('dlGrid').innerHTML=(D.handouts||[]).map(h=>`
       <button class="dl-btn" onclick="openPwModal('${esc(h.id)}')"><i class="fa-solid fa-lock"></i> 下載</button>
     </div>
   </div>`).join('');
+  document.getElementById('dlFilter').addEventListener('click',function(e){
+    const btn=e.target.closest('.filter-btn');if(!btn)return;
+    document.querySelectorAll('#dlFilter .filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const f=btn.dataset.fcat;
+    document.querySelectorAll('#dlGrid .dl-card').forEach(c=>c.style.display=(f==='all'||c.dataset.fcat===f)?'':'none');
+  },{once:true});
   observeFadeUp();
 }
 renderHandouts();
