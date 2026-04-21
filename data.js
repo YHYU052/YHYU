@@ -1,7 +1,7 @@
 // =====================================================================
 // TECH SQUIDS — 網站資料設定檔 (data.js)
 // 由後台管理介面自動產生
-// 產生時間：2026/4/21 下午5:51:05
+// 產生時間：2026/4/21 下午9:42:06
 // =====================================================================
 
 var SITE_DATA = {
@@ -149,7 +149,7 @@ var SITE_DATA = {
     {
       "id": "ws_1776754890589",
       "status": "open",
-      "title": "放大版電子零件教具組裝與使用 - 全國教師在職進修網 [5539956]",
+      "title": "放大版電子零件教具組裝與使用",
       "location": "新北市江翠自造教育及科技中心",
       "capacity": 20,
       "enrolled": 0,
@@ -158,12 +158,13 @@ var SITE_DATA = {
       "month": "MAY",
       "day": "5",
       "year": "2026",
-      "signupUrl": "https://www5.inservice.edu.tw/index_login.aspx"
+      "signupUrl": "https://www5.inservice.edu.tw/index_login.aspx",
+      "note": "[全國教師在職進修網研習代碼：5539956]  ※此研習是上學期相關研習的延伸，故僅開放有參加上學期研習的人員參與。"
     },
     {
       "id": "ws_1776754477007",
       "status": "open",
-      "title": "LED萬年曆 - 全國教師在職進修網 [5558412]",
+      "title": "LED萬年曆",
       "location": "花蓮縣光復自造教育及科技中心",
       "capacity": 15,
       "enrolled": 0,
@@ -172,12 +173,13 @@ var SITE_DATA = {
       "month": "MAY",
       "day": "23",
       "year": "2026",
-      "signupUrl": "https://www5.inservice.edu.tw/index_login.aspx"
+      "signupUrl": "https://www5.inservice.edu.tw/index_login.aspx",
+      "note": "[全國教師在職進修網研習代碼：5558412]  僅限花蓮縣光復自造教育及科技中心種子教師社群之教師報名。"
     },
     {
       "id": "ws_1776755134484",
       "status": "soon",
-      "title": "木質耳機製作 - 全國教師在職進修網 [ N/A ]",
+      "title": "木質耳機製作",
       "location": "新北市鶯歌自造教育及科技中心",
       "capacity": 12,
       "enrolled": 0,
@@ -186,12 +188,13 @@ var SITE_DATA = {
       "month": "MAY",
       "day": "26",
       "year": "2026",
-      "signupUrl": "https://www5.inservice.edu.tw/index_login.aspx"
+      "signupUrl": "https://www5.inservice.edu.tw/index_login.aspx",
+      "note": "[全國教師在職進修網研習代碼：N/A]"
     },
     {
       "id": "ws_1776755371257",
       "status": "soon",
-      "title": "E-Paper資訊框 - 全國教師在職進修網 [ N/A ]",
+      "title": "E-Paper資訊框",
       "location": "新北市鶯歌自造教育及科技中心",
       "capacity": 10,
       "enrolled": 0,
@@ -200,7 +203,8 @@ var SITE_DATA = {
       "month": "JUN",
       "day": "9",
       "year": "2026",
-      "signupUrl": "https://www5.inservice.edu.tw/index_login.aspx"
+      "signupUrl": "https://www5.inservice.edu.tw/index_login.aspx",
+      "note": "[全國教師在職進修網研習代碼：N/A]"
     }
   ],
   "handouts": [
@@ -264,6 +268,5 @@ var SITE_DATA = {
       "badge": ""
     }
   ],
-
-  "wishFormUrl": ""
+  "wishFormUrl": "https://formspree.io/f/mykldqny"
 };
