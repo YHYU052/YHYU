@@ -452,9 +452,10 @@
       <div class="hero-logo-ring2"></div>
       <div class="hero-logo-ring"></div>
       <div class="hero-logo-inner">
-        <img id="heroLogoImg" src="" alt="Logo"
+        <img id="heroLogoImg" src="assets/logo.png" alt="Logo"
+             onload="document.getElementById('heroLogoFallback').style.display='none';"
              onerror="this.style.display='none';document.getElementById('heroLogoFallback').style.display='flex';"/>
-        <div id="heroLogoFallback" style="display:flex;">
+        <div id="heroLogoFallback" style="display:none;">
           <svg width="160" height="160" viewBox="0 0 160 160" fill="none">
             <circle cx="80" cy="80" r="78" stroke="white" stroke-width="4"/>
             <ellipse cx="80" cy="66" rx="34" ry="36" fill="#CC2222"/>
