@@ -624,7 +624,7 @@
       <div class="modal-grid">
         <div class="form-field"><label class="form-label">識別碼 <em>*</em></label><input type="text" class="form-input" id="csm_value" placeholder="ai, maker, open..."/><div class="form-hint">英文小寫，不含空格</div></div>
         <div class="form-field"><label class="form-label">顯示名稱 <em>*</em></label><input type="text" class="form-input" id="csm_label" placeholder="AI 融入"/></div>
-        <div class="form-field span2"><label class="form-label">徽章顏色</label><select class="form-select" id="csm_badge">${BADGE_OPTIONS.map(b=>`<option value="${b.v}">${b.l}</option>`).join('')}</select></div>
+        <div class="form-field span2"><label class="form-label">徽章顏色</label><select class="form-select" id="csm_badge"></select></div>
       </div>
     </div>
     <div class="modal-footer"><button class="btn-cancel" onclick="closeModal('catStatusModal')">取消</button><button class="btn-save" onclick="saveCatStatus()"><i class="fa-solid fa-floppy-disk"></i> 儲存</button></div>
@@ -802,7 +802,9 @@ function openCatStatusModal(type,idx){
   const obj=isNew?{value:'',label:'',badge:isCat?'badge-info':'badge-soon'}:arr[idx]||{};
   document.getElementById('csm_value').value=obj.value||'';
   document.getElementById('csm_label').value=obj.label||'';
-  document.getElementById('csm_badge').value=obj.badge||'badge-info';
+  const badgeSel=document.getElementById('csm_badge');
+  badgeSel.innerHTML=BADGE_OPTIONS.map(b=>`<option value="${b.v}">${b.l}</option>`).join('');
+  badgeSel.value=obj.badge||(isCat?'badge-info':'badge-soon');
   document.getElementById('catStatusModal').classList.add('open');document.body.style.overflow='hidden';
 }
 function saveCatStatus(){
