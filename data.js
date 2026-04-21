@@ -41,6 +41,21 @@ var SITE_DATA = {
     '工作坊風格強調<strong>可操作、可帶走、可複製</strong>，每一場研習都希望讓學員帶著「明天就能用」的實戰能力回家。'
   ],
 
+  // ───────────────── 作品類別 ─────────────────
+  workCategories: [
+    {value:'ai',    label:'AI 融入',    badge:'badge-ai'},
+    {value:'maker', label:'MAKER 教具', badge:'badge-maker'},
+    {value:'pbl',   label:'PBL 設計',  badge:'badge-pbl'},
+    {value:'info',  label:'資訊科技',   badge:'badge-info'}
+  ],
+
+  // ───────────────── 研習狀態 ─────────────────
+  upcomingStatuses: [
+    {value:'open', label:'OPEN 報名中',   badge:'badge-open'},
+    {value:'soon', label:'SOON 即將開放', badge:'badge-soon'},
+    {value:'full', label:'FULL 已額滿',   badge:'badge-full'}
+  ],
+
   // ───────────────── 技能標籤 ─────────────────
   skillGroups: [
     {

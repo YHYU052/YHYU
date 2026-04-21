@@ -413,6 +413,22 @@
           </div>
           <div id="skillGroupsList"></div>
         </div>
+        <!-- Work Categories -->
+        <div style="margin-top:28px;">
+          <div class="sec-hdr" style="margin-bottom:12px;">
+            <div><div class="sec-title" style="font-size:14px;">作品類別 <span>CATEGORIES</span></div><div class="sec-sub">作品卡片的分類標籤</div></div>
+            <button class="btn-add" onclick="openCatStatusModal('cat')"><i class="fa-solid fa-plus"></i> 新增</button>
+          </div>
+          <div id="catsList"></div>
+        </div>
+        <!-- Upcoming Statuses -->
+        <div style="margin-top:28px;">
+          <div class="sec-hdr" style="margin-bottom:12px;">
+            <div><div class="sec-title" style="font-size:14px;">研習狀態 <span>STATUSES</span></div><div class="sec-sub">即將開課的報名狀態標籤</div></div>
+            <button class="btn-add" onclick="openCatStatusModal('status')"><i class="fa-solid fa-plus"></i> 新增</button>
+          </div>
+          <div id="statusesList"></div>
+        </div>
       </div>
 
       <!-- Works -->
@@ -562,6 +578,23 @@
   </div>
 </div>
 
+<!-- ══ Category / Status Modal ══ -->
+<div class="modal-overlay" id="catStatusModal">
+  <div class="modal-box">
+    <div class="modal-hdr"><div class="modal-hdr-title" id="csmTitle">新增 <span>類別</span></div><button class="modal-close" onclick="closeModal('catStatusModal')"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="modal-body">
+      <input type="hidden" id="csm_type"/>
+      <input type="hidden" id="csm_idx"/>
+      <div class="modal-grid">
+        <div class="form-field"><label class="form-label">識別碼 <em>*</em></label><input type="text" class="form-input" id="csm_value" placeholder="ai, maker, open..."/><div class="form-hint">英文小寫，不含空格</div></div>
+        <div class="form-field"><label class="form-label">顯示名稱 <em>*</em></label><input type="text" class="form-input" id="csm_label" placeholder="AI 融入"/></div>
+        <div class="form-field span2"><label class="form-label">徽章顏色</label><select class="form-select" id="csm_badge">${BADGE_OPTIONS.map(b=>`<option value="${b.v}">${b.l}</option>`).join('')}</select></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn-cancel" onclick="closeModal('catStatusModal')">取消</button><button class="btn-save" onclick="saveCatStatus()"><i class="fa-solid fa-floppy-disk"></i> 儲存</button></div>
+  </div>
+</div>
+
 <!-- ══ Skill Group Modal ══ -->
 <div class="modal-overlay" id="skillGroupModal">
   <div class="modal-box">
@@ -599,8 +632,18 @@
 /* ══ Config ══ */
 const ADMIN_PASSWORD = 'Yhyu0052'; // ← 修改後台密碼
 
-const CAT_MAP={ai:{label:'AI 融入',badge:'badge-ai'},maker:{label:'MAKER 教具',badge:'badge-maker'},pbl:{label:'PBL 設計',badge:'badge-pbl'},info:{label:'資訊科技',badge:'badge-info'}};
-const STATUS_MAP={open:{label:'OPEN 報名中',badge:'badge-open'},soon:{label:'SOON 即將開放',badge:'badge-soon'},full:{label:'FULL 已額滿',badge:'badge-full'}};
+const DEFAULT_CATS=[{value:'ai',label:'AI 融入',badge:'badge-ai'},{value:'maker',label:'MAKER 教具',badge:'badge-maker'},{value:'pbl',label:'PBL 設計',badge:'badge-pbl'},{value:'info',label:'資訊科技',badge:'badge-info'}];
+const DEFAULT_STATUSES=[{value:'open',label:'OPEN 報名中',badge:'badge-open'},{value:'soon',label:'SOON 即將開放',badge:'badge-soon'},{value:'full',label:'FULL 已額滿',badge:'badge-full'}];
+const BADGE_OPTIONS=[{v:'badge-ai',l:'藍'},{v:'badge-maker',l:'紅'},{v:'badge-pbl',l:'綠'},{v:'badge-info',l:'黃'},{v:'badge-full',l:'灰'}];
+function getCats(){return state.workCategories||DEFAULT_CATS;}
+function getStatuses(){return state.upcomingStatuses||DEFAULT_STATUSES;}
+let CAT_MAP={}, STATUS_MAP={};
+function rebuildMaps(){
+  CAT_MAP={};getCats().forEach(c=>CAT_MAP[c.value]={label:c.label,badge:c.badge||'badge-info'});
+  STATUS_MAP={};getStatuses().forEach(s=>STATUS_MAP[s.value]={label:s.label,badge:s.badge||'badge-soon'});
+}
+function populateWorkCatSelect(){const s=document.getElementById('wm_cat');const cur=s.value;s.innerHTML=getCats().map(c=>`<option value="${esc(c.value)}">${esc(c.label)}</option>`).join('');s.value=cur||getCats()[0]?.value||'';}
+function populateStatusSelect(){const s=document.getElementById('um_status');const cur=s.value;s.innerHTML=getStatuses().map(c=>`<option value="${esc(c.value)}">${esc(c.label)}</option>`).join('');s.value=cur||getStatuses()[0]?.value||'';}
 const TITLES={dashboard:'DASH<span>BOARD</span>',settings:'個人<span>設定</span>',works:'研習<span>作品</span>',upcoming:'即將<span>開課</span>',handouts:'講義<span>下載</span>',export:'匯出 <span>data.js</span>'};
 
 /* ══ State ══ */
@@ -652,7 +695,7 @@ function switchTab(tab){
 }
 
 /* ══ Render ══ */
-function renderAll(){updateBadges();updateDashboard();renderWorksTable();renderUpcomingTable();renderHandoutsTable();renderInfoCardsList();renderSkillGroupsList();}
+function renderAll(){rebuildMaps();updateBadges();updateDashboard();renderWorksTable();renderUpcomingTable();renderHandoutsTable();renderInfoCardsList();renderSkillGroupsList();renderCatsList();renderStatusesList();}
 function updateBadges(){document.getElementById('badgeWorks').textContent=state.works.length;document.getElementById('badgeUpcoming').textContent=state.upcoming.length;document.getElementById('badgeHandouts').textContent=state.handouts.length;}
 function updateDashboard(){document.getElementById('dWorks').textContent=state.works.length;document.getElementById('dUpcoming').textContent=state.upcoming.length;document.getElementById('dHandouts').textContent=state.handouts.length;document.getElementById('dOpenWS').textContent=state.upcoming.filter(u=>u.status==='open').length;}
 
@@ -669,6 +712,8 @@ function fillSettingsForm(){
   document.getElementById('s_bio2').value=state.bio[2]||'';
   renderInfoCardsList();
   renderSkillGroupsList();
+  renderCatsList();
+  renderStatusesList();
 }
 function saveSettings(){
   ['brand','name','school','subject','position','email','github','line','subtitle','eyebrow'].forEach(f=>{const el=document.getElementById('s_'+f);if(el)state.personal[f]=el.value.trim();});
@@ -676,6 +721,75 @@ function saveSettings(){
   state.stats={workshops:parseInt(document.getElementById('s_statWS').value)||0,works:parseInt(document.getElementById('s_statWK').value)||0,years:parseInt(document.getElementById('s_statYR').value)||0};
   state.bio=[document.getElementById('s_bio0').value.trim(),document.getElementById('s_bio1').value.trim(),document.getElementById('s_bio2').value.trim()].filter(Boolean);
   saveState();toast('✓ 個人設定已儲存','success');
+}
+
+/* ══ Categories & Statuses ══ */
+function renderCatsList(){
+  const el=document.getElementById('catsList');if(!el)return;
+  const arr=getCats();
+  el.innerHTML=arr.map((c,i)=>`
+    <div style="display:flex;align-items:center;gap:12px;padding:8px 14px;background:var(--card2);border:1px solid var(--border);margin-bottom:6px;">
+      <span class="td-badge ${c.badge||'badge-info'}">${esc(c.label)}</span>
+      <span style="font-family:var(--fm);font-size:11px;color:var(--gray2);">${esc(c.value)}</span>
+      <div class="row-actions" style="margin-left:auto;">
+        <button class="btn-up" onclick="moveCatStatus('cat',${i},-1)"><i class="fa-solid fa-chevron-up"></i></button>
+        <button class="btn-dn" onclick="moveCatStatus('cat',${i},1)"><i class="fa-solid fa-chevron-down"></i></button>
+        <button class="btn-edit" onclick="openCatStatusModal('cat',${i})">編輯</button>
+        <button class="btn-del" onclick="deleteCatStatus('cat',${i})"><i class="fa-solid fa-trash"></i></button>
+      </div>
+    </div>`).join('');
+}
+function renderStatusesList(){
+  const el=document.getElementById('statusesList');if(!el)return;
+  const arr=getStatuses();
+  el.innerHTML=arr.map((s,i)=>`
+    <div style="display:flex;align-items:center;gap:12px;padding:8px 14px;background:var(--card2);border:1px solid var(--border);margin-bottom:6px;">
+      <span class="td-badge ${s.badge||'badge-soon'}">${esc(s.label)}</span>
+      <span style="font-family:var(--fm);font-size:11px;color:var(--gray2);">${esc(s.value)}</span>
+      <div class="row-actions" style="margin-left:auto;">
+        <button class="btn-up" onclick="moveCatStatus('status',${i},-1)"><i class="fa-solid fa-chevron-up"></i></button>
+        <button class="btn-dn" onclick="moveCatStatus('status',${i},1)"><i class="fa-solid fa-chevron-down"></i></button>
+        <button class="btn-edit" onclick="openCatStatusModal('status',${i})">編輯</button>
+        <button class="btn-del" onclick="deleteCatStatus('status',${i})"><i class="fa-solid fa-trash"></i></button>
+      </div>
+    </div>`).join('');
+}
+function openCatStatusModal(type,idx){
+  const isNew=idx===undefined;
+  const isCat=type==='cat';
+  document.getElementById('csmTitle').innerHTML=isNew?`新增 <span>${isCat?'類別':'狀態'}</span>`:`編輯 <span>${isCat?'類別':'狀態'}</span>`;
+  document.getElementById('csm_type').value=type;
+  document.getElementById('csm_idx').value=isNew?'':idx;
+  const arr=isCat?getCats():getStatuses();
+  const obj=isNew?{value:'',label:'',badge:isCat?'badge-info':'badge-soon'}:arr[idx]||{};
+  document.getElementById('csm_value').value=obj.value||'';
+  document.getElementById('csm_label').value=obj.label||'';
+  document.getElementById('csm_badge').value=obj.badge||'badge-info';
+  document.getElementById('catStatusModal').classList.add('open');document.body.style.overflow='hidden';
+}
+function saveCatStatus(){
+  const type=document.getElementById('csm_type').value;
+  const idx=document.getElementById('csm_idx').value;
+  const value=document.getElementById('csm_value').value.trim().replace(/\s+/g,'_');
+  const label=document.getElementById('csm_label').value.trim();
+  if(!value||!label){toast('請填入識別碼與名稱','error');return;}
+  const obj={value,label,badge:document.getElementById('csm_badge').value};
+  const key=type==='cat'?'workCategories':'upcomingStatuses';
+  if(!state[key])state[key]=type==='cat'?[...DEFAULT_CATS]:[...DEFAULT_STATUSES];
+  if(idx==='')state[key].push(obj);else state[key][parseInt(idx)]=obj;
+  saveState();rebuildMaps();renderAll();closeModal('catStatusModal');toast('✓ 已儲存','success');
+}
+function deleteCatStatus(type,idx){
+  if(!confirm('確定刪除？'))return;
+  const key=type==='cat'?'workCategories':'upcomingStatuses';
+  if(!state[key])state[key]=type==='cat'?[...DEFAULT_CATS]:[...DEFAULT_STATUSES];
+  state[key].splice(idx,1);saveState();rebuildMaps();renderAll();toast('已刪除','success');
+}
+function moveCatStatus(type,idx,dir){
+  const key=type==='cat'?'workCategories':'upcomingStatuses';
+  if(!state[key])state[key]=type==='cat'?[...DEFAULT_CATS]:[...DEFAULT_STATUSES];
+  const arr=state[key];const ni=idx+dir;if(ni<0||ni>=arr.length)return;
+  [arr[idx],arr[ni]]=[arr[ni],arr[idx]];saveState();rebuildMaps();renderAll();
 }
 
 /* ══ Skill Groups ══ */
@@ -788,6 +902,7 @@ function openWorkModal(idx){
   document.getElementById('wm_image_file').value='';
   if(w.image)showImgPreview(w.image);else clearImgPreview();
   updateIconPreview('wm_icon','wm_icon_preview');
+  populateWorkCatSelect();
   document.getElementById('workModal').classList.add('open');document.body.style.overflow='hidden';
 }
 function handleImageUpload(input){
@@ -841,6 +956,7 @@ function openUpcomingModal(idx){
   document.getElementById('um_idx').value=isNew?'':idx;
   const u=isNew?{status:'soon',title:'',location:'',capacity:30,enrolled:0,hours:6,timeNote:'',month:'',day:'',year:'2026',signupUrl:''}:state.upcoming[idx];
   document.getElementById('um_title').value=u.title||'';document.getElementById('um_status').value=u.status||'soon';document.getElementById('um_location').value=u.location||'';document.getElementById('um_capacity').value=u.capacity||'';document.getElementById('um_enrolled').value=u.enrolled||0;document.getElementById('um_hours').value=u.hours||'';document.getElementById('um_timeNote').value=u.timeNote||'';document.getElementById('um_month').value=u.month||'';document.getElementById('um_day').value=u.day||'';document.getElementById('um_year').value=u.year||'';document.getElementById('um_signupUrl').value=u.signupUrl||'';
+  populateStatusSelect();
   document.getElementById('upcomingModal').classList.add('open');document.body.style.overflow='hidden';
 }
 function saveUpcoming(){

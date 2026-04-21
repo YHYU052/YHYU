@@ -620,7 +620,7 @@ function renderStatic(){
 renderStatic();
 
 /* ══════════════ Works ══════════════ */
-const CAT_MAP={ai:'AI 融入',maker:'MAKER 教具',pbl:'PBL 設計',info:'資訊科技'};
+const CAT_MAP={};(D.workCategories||[{value:'ai',label:'AI 融入'},{value:'maker',label:'MAKER 教具'},{value:'pbl',label:'PBL 設計'},{value:'info',label:'資訊科技'}]).forEach(c=>CAT_MAP[c.value]=c.label);
 
 function renderWorks(){
   const cats=['all',...new Set((D.works||[]).map(w=>w.cat))];
@@ -679,7 +679,7 @@ function openWorkDetail(idx){
 function closeWorkModal(){document.getElementById('workDetailModal').classList.remove('open');document.body.style.overflow='';}
 
 /* ══════════════ Upcoming ══════════════ */
-const STATUS={open:{label:'OPEN 報名中',cls:'open'},soon:{label:'SOON 即將開放',cls:'soon'},full:{label:'FULL 已額滿',cls:'full'}};
+const STATUS={};(D.upcomingStatuses||[{value:'open',label:'OPEN 報名中'},{value:'soon',label:'SOON 即將開放'},{value:'full',label:'FULL 已額滿'}]).forEach(s=>STATUS[s.value]={label:s.label,cls:s.value});
 function renderUpcoming(){
 document.getElementById('timeline').innerHTML=(D.upcoming||[]).map((u,i)=>{
   const st=STATUS[u.status]||{label:u.status,cls:'soon'};
@@ -731,7 +731,12 @@ document.getElementById('dlGrid').innerHTML=(D.handouts||[]).map(h=>`
 renderHandouts();
 
 /* ══════════════ Live sync from admin ══════════════ */
-function renderAll(){D=loadData();P=D.personal;renderStatic();renderWorks();renderUpcoming();renderHandouts();}
+function renderAll(){
+  D=loadData();P=D.personal;
+  (D.workCategories||[]).forEach(c=>CAT_MAP[c.value]=c.label);
+  (D.upcomingStatuses||[]).forEach(s=>STATUS[s.value]={label:s.label,cls:s.value});
+  renderStatic();renderWorks();renderUpcoming();renderHandouts();
+}
 window.addEventListener('storage',e=>{
   if(e.key==='TECH_SQUIDS_ADMIN'){renderAll();showToast('✓ 資料已即時更新');}
 });
