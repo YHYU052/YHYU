@@ -580,47 +580,52 @@
 <script src="data.js"></script>
 <script>
 /* ══════════════ Helpers ══════════════ */
-const D = SITE_DATA, P = D.personal;
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function loadData(){const s=localStorage.getItem('TECH_SQUIDS_ADMIN');if(s){try{return JSON.parse(s);}catch(e){}}return SITE_DATA;}
+let D=loadData(), P=D.personal;
 
 /* ══════════════ Render: Static sections ══════════════ */
-document.getElementById('pageTitle').textContent = `${P.brand} | ${P.name} 研習工作坊`;
-document.getElementById('navLogo').src = P.logoFile||'assets/logo.png';
-document.getElementById('navBrand').innerHTML = P.brand.replace(/^(\S+)\s+(\S+)$/, '$1 <span>$2</span>');
-document.getElementById('heroEyebrow').textContent = P.eyebrow||'';
-document.getElementById('heroLogoImg').src = P.logoFile||'assets/logo.png';
-document.getElementById('heroSubtitle').innerHTML = `${P.school}・${P.subject}<br/>${P.position}`;
-(()=>{const p=P.brand.split(' ');document.getElementById('heroName').innerHTML=p[0]+(p[1]?`<span class="line2">${p[1]}</span>`:'');})();
-document.getElementById('heroTags').innerHTML = (D.heroTags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join('');
-document.getElementById('aboutName').textContent = P.name||'';
-document.getElementById('bioParagraphs').innerHTML = (D.bio||[]).map(b=>`<p class="about-bio">${b}</p>`).join('');
-document.getElementById('skillGroupsContainer').innerHTML = (D.skillGroups||[]).map(g=>`
+function renderStatic(){
+  P=D.personal;
+  document.getElementById('pageTitle').textContent = `${P.brand} | ${P.name} 研習工作坊`;
+  document.getElementById('navLogo').src = P.logoFile||'assets/logo.png';
+  document.getElementById('navBrand').innerHTML = P.brand.replace(/^(\S+)\s+(\S+)$/, '$1 <span>$2</span>');
+  document.getElementById('heroEyebrow').textContent = P.eyebrow||'';
+  document.getElementById('heroLogoImg').src = P.logoFile||'assets/logo.png';
+  document.getElementById('heroSubtitle').innerHTML = `${P.school}・${P.subject}<br/>${P.position}`;
+  (()=>{const p=P.brand.split(' ');document.getElementById('heroName').innerHTML=p[0]+(p[1]?`<span class="line2">${p[1]}</span>`:'');})();
+  document.getElementById('heroTags').innerHTML = (D.heroTags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join('');
+  document.getElementById('aboutName').textContent = P.name||'';
+  document.getElementById('bioParagraphs').innerHTML = (D.bio||[]).map(b=>`<p class="about-bio">${b}</p>`).join('');
+  document.getElementById('skillGroupsContainer').innerHTML = (D.skillGroups||[]).map(g=>`
   <div class="skill-group">
     <div class="skill-group-label">${esc(g.label)}</div>
     <div class="skill-tags">${(g.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div>
   </div>`).join('');
-document.getElementById('infoCardsContainer').innerHTML = (D.infoCards||[]).map(c=>`
+  document.getElementById('infoCardsContainer').innerHTML = (D.infoCards||[]).map(c=>`
   <div class="info-card fade-up">
     <div class="info-card-icon"><i class="fa-solid ${esc(c.icon)}"></i></div>
     <div class="info-card-title">${esc(c.title)}</div>
     <div class="info-card-desc">${c.desc}</div>
   </div>`).join('');
-const bp=P.brand.split(' ');
-document.getElementById('footerBrand').innerHTML=bp[0]+(bp[1]?` <span>${bp[1]}</span>`:'');
-document.getElementById('footerCopy').textContent=`© ${new Date().getFullYear()} ${P.name} · ${P.school}`;
-document.getElementById('dlEmail').textContent=P.email;
-document.getElementById('footerSocials').innerHTML=`
+  const bp=P.brand.split(' ');
+  document.getElementById('footerBrand').innerHTML=bp[0]+(bp[1]?` <span>${bp[1]}</span>`:'');
+  document.getElementById('footerCopy').textContent=`© ${new Date().getFullYear()} ${P.name} · ${P.school}`;
+  document.getElementById('dlEmail').textContent=P.email;
+  document.getElementById('footerSocials').innerHTML=`
   <a href="mailto:${esc(P.email)}" title="Email"><i class="fa-solid fa-envelope"></i></a>
   <a href="${esc(P.github||'#')}" title="GitHub" target="_blank"><i class="fa-brands fa-github"></i></a>
   <a href="${esc(P.line||'#')}" title="LINE" target="_blank"><i class="fa-brands fa-line"></i></a>`;
+}
+renderStatic();
 
 /* ══════════════ Works ══════════════ */
 const CAT_MAP={ai:'AI 融入',maker:'MAKER 教具',pbl:'PBL 設計',info:'資訊科技'};
-const cats=['all',...new Set((D.works||[]).map(w=>w.cat))];
-document.getElementById('worksFilter').innerHTML=
-  cats.map((c,i)=>`<button class="filter-btn${i===0?' active':''}" data-filter="${c}">${c==='all'?'ALL':(CAT_MAP[c]||c)}</button>`).join('');
 
 function renderWorks(){
+  const cats=['all',...new Set((D.works||[]).map(w=>w.cat))];
+  document.getElementById('worksFilter').innerHTML=
+    cats.map((c,i)=>`<button class="filter-btn${i===0?' active':''}" data-filter="${c}">${c==='all'?'ALL':(CAT_MAP[c]||c)}</button>`).join('');
   document.getElementById('worksGrid').innerHTML=(D.works||[]).map((w,i)=>`
     <div class="work-card fade-up" data-cat="${esc(w.cat)}" onclick="openWorkDetail(${i})">
       <div class="work-thumb">
@@ -675,6 +680,7 @@ function closeWorkModal(){document.getElementById('workDetailModal').classList.r
 
 /* ══════════════ Upcoming ══════════════ */
 const STATUS={open:{label:'OPEN 報名中',cls:'open'},soon:{label:'SOON 即將開放',cls:'soon'},full:{label:'FULL 已額滿',cls:'full'}};
+function renderUpcoming(){
 document.getElementById('timeline').innerHTML=(D.upcoming||[]).map((u,i)=>{
   const st=STATUS[u.status]||{label:u.status,cls:'soon'};
   return`<div class="timeline-item">
@@ -700,8 +706,11 @@ document.getElementById('timeline').innerHTML=(D.upcoming||[]).map((u,i)=>{
     </div>
   </div>`;
 }).join('');
+}
+renderUpcoming();
 
 /* ══════════════ Handouts ══════════════ */
+function renderHandouts(){
 document.getElementById('dlGrid').innerHTML=(D.handouts||[]).map(h=>`
   <div class="dl-card fade-up">
     <div class="dl-card-top">
@@ -717,6 +726,15 @@ document.getElementById('dlGrid').innerHTML=(D.handouts||[]).map(h=>`
       <button class="dl-btn" onclick="openPwModal('${esc(h.id)}')"><i class="fa-solid fa-lock"></i> 下載</button>
     </div>
   </div>`).join('');
+  observeFadeUp();
+}
+renderHandouts();
+
+/* ══════════════ Live sync from admin ══════════════ */
+function renderAll(){D=loadData();P=D.personal;renderStatic();renderWorks();renderUpcoming();renderHandouts();}
+window.addEventListener('storage',e=>{
+  if(e.key==='TECH_SQUIDS_ADMIN'){renderAll();showToast('✓ 資料已即時更新');}
+});
 
 /* ══════════════ Password Modal ══════════════ */
 let currentFileId=null;
