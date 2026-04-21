@@ -1,7 +1,7 @@
 // =====================================================================
 // TECH SQUIDS — 網站資料設定檔 (data.js)
 // 由後台管理介面自動產生
-// 產生時間：2026/4/21 下午3:43:59
+// 產生時間：2026/4/21 下午4:35:22
 // =====================================================================
 
 var SITE_DATA = {
@@ -19,15 +19,18 @@ var SITE_DATA = {
     "logoFile": "assets/logo.png"
   },
   "stats": {
-    "workshops": 20,
-    "works": 6,
-    "years": 8
+    "workshops": 38,
+    "works": 20,
+    "years": 13
   },
   "heroTags": [
+    "MAKER",
     "Arduino / ESP32",
     "機電整合",
     "IoT 物聯網",
-    "電子電路"
+    "電子電路",
+    "教具設計",
+    "產品設計"
   ],
   "bio": [
     "任職於<strong>新北市柑園國中</strong>，擔任生活科技教師，同時身兼資設組長職務。<br/>\n長期致力於推動<strong>跨域 STEAM 教育</strong>、創客教具設計與 AI 融入教學，<br/>\n也是「<strong>柑園國中棒球隊</strong>」的幕後推手之一。",
@@ -38,12 +41,10 @@ var SITE_DATA = {
     {
       "label": "// TEACHING & RESEARCH",
       "tags": [
-        "ARCS 動機模型",
-        "PBL",
-        "CLIL 雙語",
-        "TUI / GUI 教具",
-        "準實驗設計",
-        "JASP 統計"
+        "生活科技",
+        "Technology Education",
+        "雙語教學",
+        "Bilingual Teaching"
       ]
     },
     {
@@ -52,20 +53,19 @@ var SITE_DATA = {
         "Arduino",
         "ESP32",
         "Raspberry Pi",
-        "3D 列印",
-        "WS2812 LED",
-        "n8n 自動化",
-        "RAG Chatbot"
+        "3D Printing",
+        "雷射切割"
       ]
     },
     {
       "label": "// DESIGN & TOOLS",
       "tags": [
         "Tinkercad",
-        "Unity",
-        "Canva Pro",
-        "WLED",
-        "GitHub Pages"
+        "Fusion360",
+        "Arduino",
+        "Fritzing",
+        "Illustrator",
+        "Claude"
       ]
     }
   ],
@@ -83,12 +83,12 @@ var SITE_DATA = {
     {
       "icon": "fa-microchip",
       "title": "MAKER SPECIALTY",
-      "desc": "電子電路可視化教具・3D 列印外殼<br/>IoT × 教學情境整合系統設計"
+      "desc": "電子電路教具開發<br/>\n<strong>數位製造教學</strong> [ 3D列印・雷射切割・真空成形 ]"
     },
     {
       "icon": "fa-baseball",
-      "title": "GANYUAN WARRIORS",
-      "desc": "柑園勇士棒球隊・品牌設計・球員訓練<br/>橘 × 深灰配色・競技精神 × 教育理念"
+      "title": "GANYUAN BASEBALL",
+      "desc": "柑園國中棒球隊<br/>\n訓練・比賽"
     }
   ],
   "works": [],
@@ -126,7 +126,7 @@ var SITE_DATA = {
       "status": "soon",
       "title": "木質耳機製作 - 全國教師在職進修網 [ N/A ]",
       "location": "新北市鶯歌自造教育及科技中心",
-      "capacity": 30,
+      "capacity": 12,
       "enrolled": 0,
       "hours": 6,
       "timeNote": "09:00 - 16:00",
@@ -140,7 +140,7 @@ var SITE_DATA = {
       "status": "soon",
       "title": "E-Paper資訊框 - 全國教師在職進修網 [ N/A ]",
       "location": "新北市鶯歌自造教育及科技中心",
-      "capacity": 30,
+      "capacity": 10,
       "enrolled": 0,
       "hours": 6,
       "timeNote": "09:00 - 16:00",
@@ -153,99 +153,33 @@ var SITE_DATA = {
   "handouts": [
     {
       "id": "ai2024dl",
-      "title": "生成式 AI 融入教學設計實戰班",
-      "date": "2024 / 10",
-      "format": "PDF",
-      "size": "3.2 MB",
-      "desc": "含完整簡報、活動學習單、提示詞範例庫、課程設計模板。",
-      "icon": "fa-robot",
-      "password": "2026",
+      "title": "LED Wi-Fi 時鐘 - 台北新興",
+      "date": "2026/04/17",
+      "format": "Google Drive",
+      "size": "1.3 MB",
+      "desc": "簡報、說明書、雷射切割檔案、程式碼",
+      "icon": "fa-clock",
+      "password": "XX0417CLOCK",
       "url": "https://drive.google.com/drive/folders/1kaAFEuOnkrSyE-vXctQvaR8mxbHdnwNT?usp=drive_link",
       "tags": [
-        "AI融入",
-        "PBL",
-        "ARCS"
+        "LED時鐘",
+        "台北新興"
       ]
     },
     {
-      "id": "tui2024dl",
-      "title": "TUI 放大教具設計工作坊講義",
-      "date": "2024 / 05",
-      "format": "PDF",
-      "size": "5.8 MB",
-      "desc": "教具電路圖、3D 列印檔案說明、ARCS 動機評量量表、教學活動單。",
+      "id": "hl_1776759362836",
+      "title": "音頻放大器 - 花蓮光復",
+      "date": "2026/01/24",
+      "format": "Google Drive",
+      "size": "2.1 MB",
+      "desc": "簡報",
+      "icon": "fa-music",
+      "password": "GFSPEAKER",
+      "url": "https://drive.google.com/drive/folders/1LSPcgICDiEXSI4mU0dTjPTctTxhGimYI?usp=drive_link",
       "tags": [
-        "TUI",
-        "MAKER",
-        "WS2812"
-      ],
-      "icon": "fa-puzzle-piece",
-      "password": "TUI2024WS",
-      "url": "handouts/tui-2024.pdf"
-    },
-    {
-      "id": "pbl2023dl",
-      "title": "PBL × 智慧校園課程設計手冊",
-      "date": "2023 / 11",
-      "format": "PDF",
-      "size": "4.1 MB",
-      "desc": "六週課程地圖、驅動問題設計範例、跨域評量規準（Rubric）、學習歷程模板。",
-      "tags": [
-        "PBL",
-        "跨域",
-        "IoT"
-      ],
-      "icon": "fa-sitemap",
-      "password": "PBL2023NY",
-      "url": "handouts/pbl-2023.pdf"
-    },
-    {
-      "id": "n8n2025dl",
-      "title": "n8n × LINE × AI 自動化工作坊",
-      "date": "2025 / 03",
-      "format": "PDF",
-      "size": "2.7 MB",
-      "desc": "節點設定截圖教學、流程範本 JSON 匯出、常見錯誤排除 QA、擴充應用建議。",
-      "tags": [
-        "n8n",
-        "LINE",
-        "AI API"
-      ],
-      "icon": "fa-network-wired",
-      "password": "N8N2025TS",
-      "url": "handouts/n8n-2025.pdf"
-    },
-    {
-      "id": "rag2025dl",
-      "title": "RAG Chatbot 校務機器人建置手冊",
-      "date": "2025 / 06",
-      "format": "PDF",
-      "size": "6.3 MB",
-      "desc": "架構說明、知識庫前處理腳本、向量資料庫設定、LINE 部署完整流程。",
-      "tags": [
-        "RAG",
-        "LLM",
-        "向量資料庫"
-      ],
-      "icon": "fa-brain",
-      "password": "RAG2025TS",
-      "url": "handouts/rag-2025.pdf"
-    },
-    {
-      "id": "esp2023dl",
-      "title": "ESP32 互動教具設計實作手冊",
-      "date": "2023 / 08",
-      "format": "PDF",
-      "size": "4.9 MB",
-      "desc": "電路接線圖、韌體程式碼、Tinkercad 外殼設計步驟、配套教學活動單。",
-      "tags": [
-        "ESP32",
-        "3D列印",
-        "Maker"
-      ],
-      "icon": "fa-microchip",
-      "password": "ESP2023MK",
-      "url": "handouts/esp32-2023.pdf"
+        "音頻放大器",
+        "花蓮光復"
+      ]
     }
   ],
   "upcomingStatuses": [
