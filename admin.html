@@ -397,6 +397,14 @@
         <div style="margin-top:14px;text-align:right;">
           <button class="btn-save" onclick="saveSettings()"><i class="fa-solid fa-floppy-disk"></i>&nbsp; 儲存設定</button>
         </div>
+        <!-- Info Cards -->
+        <div style="margin-top:28px;">
+          <div class="sec-hdr" style="margin-bottom:12px;">
+            <div><div class="sec-title" style="font-size:14px;">資訊卡片 <span>INFO CARDS</span></div><div class="sec-sub">首頁下方的專長/職位卡片</div></div>
+            <button class="btn-add" onclick="openInfoCardModal()"><i class="fa-solid fa-plus"></i> 新增</button>
+          </div>
+          <div id="infoCardsList"></div>
+        </div>
       </div>
 
       <!-- Works -->
@@ -546,6 +554,22 @@
   </div>
 </div>
 
+<!-- ══ Info Card Modal ══ -->
+<div class="modal-overlay" id="infoCardModal">
+  <div class="modal-box">
+    <div class="modal-hdr"><div class="modal-hdr-title" id="icmTitle">新增 <span>卡片</span></div><button class="modal-close" onclick="closeModal('infoCardModal')"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="modal-body">
+      <input type="hidden" id="icm_idx"/>
+      <div class="modal-grid">
+        <div class="form-field"><label class="form-label">Font Awesome 圖示 <em>*</em></label><input type="text" class="form-input" id="icm_icon" placeholder="fa-school" oninput="updateIconPreview('icm_icon','icm_icon_preview')"/><div class="icon-preview"><i id="icm_icon_preview" class="fa-solid fa-school"></i> 預覽</div></div>
+        <div class="form-field"><label class="form-label">標題 <em>*</em></label><input type="text" class="form-input" id="icm_title" placeholder="CURRENT POSITION"/></div>
+        <div class="form-field span2"><label class="form-label">內容（換行用 &lt;br/&gt;）</label><textarea class="form-textarea" id="icm_desc" rows="3" placeholder="第一行內容&#10;第二行用 &lt;br/&gt; 分隔"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn-cancel" onclick="closeModal('infoCardModal')">取消</button><button class="btn-save" onclick="saveInfoCard()"><i class="fa-solid fa-floppy-disk"></i> 儲存</button></div>
+  </div>
+</div>
+
 <!-- ══ JAVASCRIPT ══ -->
 <script src="data.js"></script>
 <script>
@@ -605,7 +629,7 @@ function switchTab(tab){
 }
 
 /* ══ Render ══ */
-function renderAll(){updateBadges();updateDashboard();renderWorksTable();renderUpcomingTable();renderHandoutsTable();}
+function renderAll(){updateBadges();updateDashboard();renderWorksTable();renderUpcomingTable();renderHandoutsTable();renderInfoCardsList();}
 function updateBadges(){document.getElementById('badgeWorks').textContent=state.works.length;document.getElementById('badgeUpcoming').textContent=state.upcoming.length;document.getElementById('badgeHandouts').textContent=state.handouts.length;}
 function updateDashboard(){document.getElementById('dWorks').textContent=state.works.length;document.getElementById('dUpcoming').textContent=state.upcoming.length;document.getElementById('dHandouts').textContent=state.handouts.length;document.getElementById('dOpenWS').textContent=state.upcoming.filter(u=>u.status==='open').length;}
 
@@ -620,6 +644,7 @@ function fillSettingsForm(){
   document.getElementById('s_bio0').value=state.bio[0]||'';
   document.getElementById('s_bio1').value=state.bio[1]||'';
   document.getElementById('s_bio2').value=state.bio[2]||'';
+  renderInfoCardsList();
 }
 function saveSettings(){
   ['brand','name','school','subject','position','email','github','line','subtitle','eyebrow'].forEach(f=>{const el=document.getElementById('s_'+f);if(el)state.personal[f]=el.value.trim();});
@@ -627,6 +652,52 @@ function saveSettings(){
   state.stats={workshops:parseInt(document.getElementById('s_statWS').value)||0,works:parseInt(document.getElementById('s_statWK').value)||0,years:parseInt(document.getElementById('s_statYR').value)||0};
   state.bio=[document.getElementById('s_bio0').value.trim(),document.getElementById('s_bio1').value.trim(),document.getElementById('s_bio2').value.trim()].filter(Boolean);
   saveState();toast('✓ 個人設定已儲存','success');
+}
+
+/* ══ Info Cards ══ */
+function renderInfoCardsList(){
+  const list=document.getElementById('infoCardsList');if(!list)return;
+  const cards=state.infoCards||[];
+  if(!cards.length){list.innerHTML='<div style="color:var(--gray);font-family:var(--fm);font-size:12px;padding:12px 0;">尚無卡片</div>';return;}
+  list.innerHTML=cards.map((c,i)=>`
+    <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--card2);border:1px solid var(--border);margin-bottom:6px;">
+      <i class="fa-solid ${esc(c.icon||'fa-star')}" style="color:var(--red);width:20px;text-align:center;"></i>
+      <div style="flex:1;">
+        <div style="font-family:var(--fe);font-size:12px;letter-spacing:2px;color:var(--white);">${esc(c.title)}</div>
+        <div style="font-family:var(--fm);font-size:11px;color:var(--gray);margin-top:2px;">${(c.desc||'').replace(/<br\s*\/?>/gi,' · ')}</div>
+      </div>
+      <div class="row-actions">
+        <button class="btn-up" onclick="moveItem('infoCards',${i},-1)"><i class="fa-solid fa-chevron-up"></i></button>
+        <button class="btn-dn" onclick="moveItem('infoCards',${i},1)"><i class="fa-solid fa-chevron-down"></i></button>
+        <button class="btn-edit" onclick="openInfoCardModal(${i})">編輯</button>
+        <button class="btn-del" onclick="deleteInfoCard(${i})"><i class="fa-solid fa-trash"></i></button>
+      </div>
+    </div>`).join('');
+}
+function openInfoCardModal(idx){
+  const isNew=idx===undefined;
+  document.getElementById('icmTitle').innerHTML=isNew?'新增 <span>卡片</span>':'編輯 <span>卡片</span>';
+  document.getElementById('icm_idx').value=isNew?'':idx;
+  const c=isNew?{icon:'fa-star',title:'',desc:''}:(state.infoCards||[])[idx]||{};
+  document.getElementById('icm_icon').value=c.icon||'';
+  document.getElementById('icm_title').value=c.title||'';
+  document.getElementById('icm_desc').value=c.desc||'';
+  updateIconPreview('icm_icon','icm_icon_preview');
+  document.getElementById('infoCardModal').classList.add('open');document.body.style.overflow='hidden';
+}
+function saveInfoCard(){
+  const idx=document.getElementById('icm_idx').value;
+  const icon=document.getElementById('icm_icon').value.trim();
+  const title=document.getElementById('icm_title').value.trim();
+  if(!title){toast('請輸入標題','error');return;}
+  const obj={icon:icon||'fa-star',title,desc:document.getElementById('icm_desc').value.trim()};
+  if(!state.infoCards)state.infoCards=[];
+  if(idx==='')state.infoCards.push(obj);else state.infoCards[parseInt(idx)]=obj;
+  saveState();renderInfoCardsList();closeModal('infoCardModal');toast('✓ 卡片已儲存','success');
+}
+function deleteInfoCard(idx){
+  if(!confirm('確定刪除此卡片？'))return;
+  state.infoCards.splice(idx,1);saveState();renderInfoCardsList();toast('已刪除','success');
 }
 
 /* ══ Works ══ */
