@@ -1,7 +1,7 @@
 // =====================================================================
 // TECH SQUIDS — 網站資料設定檔 (data.js)
 // 由後台管理介面自動產生
-// 產生時間：2026/4/22 下午4:10:54
+// 產生時間：2026/4/22 下午4:18:53
 // =====================================================================
 
 var SITE_DATA = {
@@ -158,7 +158,7 @@ var SITE_DATA = {
       "month": "MAY",
       "day": "5",
       "year": "2026",
-      "signupUrl": "https://www5.inservice.edu.tw/index_login.aspx",
+      "signupUrl": "https://www4.inservice.edu.tw/NAPP/CourseView.aspx?cid=5539956",
       "note": "[全國教師在職進修網研習代碼：5539956]  ※此研習是上學期相關研習的延伸，故僅開放有參加上學期研習的人員參與。"
     },
     {
@@ -173,12 +173,12 @@ var SITE_DATA = {
       "month": "MAY",
       "day": "23",
       "year": "2026",
-      "signupUrl": "https://www5.inservice.edu.tw/index_login.aspx",
+      "signupUrl": "https://www4.inservice.edu.tw/NAPP/CourseView.aspx?cid=5558412",
       "note": "[全國教師在職進修網研習代碼：5558412]  僅限花蓮縣光復自造教育及科技中心種子教師社群之教師報名。"
     },
     {
       "id": "ws_1776755134484",
-      "status": "soon",
+      "status": "open",
       "title": "木質耳機製作",
       "location": "新北市鶯歌自造教育及科技中心",
       "capacity": 12,
@@ -188,8 +188,8 @@ var SITE_DATA = {
       "month": "MAY",
       "day": "26",
       "year": "2026",
-      "signupUrl": "https://www5.inservice.edu.tw/index_login.aspx",
-      "note": "[全國教師在職進修網研習代碼：N/A]"
+      "signupUrl": "https://www4.inservice.edu.tw/NAPP/CourseView.aspx?cid=557260",
+      "note": "[全國教師在職進修網研習代碼：5572603]   ☆此場次生科老師優先"
     },
     {
       "id": "ws_1776845425903",
