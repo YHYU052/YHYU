@@ -1,7 +1,7 @@
 // =====================================================================
 // TECH SQUIDS — 網站資料設定檔 (data.js)
 // 由後台管理介面自動產生
-// 產生時間：2026/4/22 上午7:11:50
+// 產生時間：2026/4/22 下午12:10:50
 // =====================================================================
 
 var SITE_DATA = {
@@ -211,6 +211,7 @@ var SITE_DATA = {
     {
       "id": "ai2024dl",
       "title": "LED Wi-Fi 時鐘 - 台北新興",
+      "cat": "handout",
       "date": "2026/04/17",
       "format": "Google Drive",
       "size": "1.3 MB",
@@ -218,7 +219,6 @@ var SITE_DATA = {
       "icon": "fa-clock",
       "password": "XX0417CLOCK",
       "url": "https://drive.google.com/drive/folders/1kaAFEuOnkrSyE-vXctQvaR8mxbHdnwNT?usp=drive_link",
-      "cat": "handout",
       "tags": [
         "LED時鐘",
         "台北新興"
@@ -227,6 +227,7 @@ var SITE_DATA = {
     {
       "id": "hl_1776759362836",
       "title": "音頻放大器 - 花蓮光復",
+      "cat": "handout",
       "date": "2026/01/24",
       "format": "Google Drive",
       "size": "2.1 MB",
@@ -234,10 +235,57 @@ var SITE_DATA = {
       "icon": "fa-music",
       "password": "GFSPEAKER",
       "url": "https://drive.google.com/drive/folders/1LSPcgICDiEXSI4mU0dTjPTctTxhGimYI?usp=drive_link",
-      "cat": "handout",
       "tags": [
         "音頻放大器",
         "花蓮光復"
+      ]
+    },
+    {
+      "id": "hl_1776816010761",
+      "title": "SG90伺服馬達孔位",
+      "cat": "share",
+      "date": "2022/12",
+      "format": "Zip",
+      "size": "7.9 MB",
+      "desc": "[下載密碼：SG90]   \nSG90伺服馬達孔位，可用於製作馬達固定支架",
+      "icon": "fa-car-side",
+      "password": "SG90",
+      "url": "https://drive.google.com/file/d/1NQZ-lQ0GfNfMS5Nxe7dPaRZLDTXwu9rC/view?usp=drive_link",
+      "tags": [
+        "SG90",
+        "雷射切割"
+      ]
+    },
+    {
+      "id": "hl_1776816177462",
+      "title": "TT馬達孔位",
+      "cat": "share",
+      "date": "2022/12",
+      "format": "Zip",
+      "size": "856 KB",
+      "desc": "[下載密碼：TTMotor]   TT馬達孔位，可用於製作馬達固定支架",
+      "icon": "fa-car-side",
+      "password": "TTMotor",
+      "url": "https://drive.google.com/file/d/1hnAwPshmeaOGH0IcsohBKYyGtvt44rGP/view?usp=drive_link",
+      "tags": [
+        "TT馬達",
+        "雷射切割"
+      ]
+    },
+    {
+      "id": "hl_1776816641578",
+      "title": "工程字與模板字",
+      "cat": "share",
+      "date": "2022/12",
+      "format": "Zip",
+      "size": "4.5 MB",
+      "desc": "[下載密碼：Font]   工程字可用於雷射切割過程快速走線做為組裝標示；模板字為可用於雷射切割的字體，中空部分不會掉落。",
+      "icon": "fa-font",
+      "password": "Font",
+      "url": "https://drive.google.com/file/d/1_VBpGzgbHMoFBVnkO7H5vz5BbSR6CpaG/view?usp=drive_link",
+      "tags": [
+        "工程字",
+        "雷射切割"
       ]
     }
   ],
@@ -276,9 +324,16 @@ var SITE_DATA = {
     }
   ],
   "wishFormUrl": "https://formspree.io/f/mykldqny",
-
   "fileCategories": [
-    {"value":"handout", "label":"研習講義", "badge":"badge-pbl"},
-    {"value":"share",   "label":"檔案分享", "badge":"badge-ai"}
+    {
+      "value": "handout",
+      "label": "研習講義",
+      "badge": "badge-pbl"
+    },
+    {
+      "value": "share",
+      "label": "檔案分享",
+      "badge": "badge-info"
+    }
   ]
 };
