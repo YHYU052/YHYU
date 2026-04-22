@@ -786,16 +786,17 @@ function renderHandouts(){
       <button class="dl-btn" onclick="openPwModal('${esc(h.id)}')"><i class="fa-solid fa-lock"></i> 下載</button>
     </div>
   </div>`).join('');
-  document.getElementById('dlFilter').addEventListener('click',function(e){
-    const btn=e.target.closest('.filter-btn');if(!btn)return;
-    document.querySelectorAll('#dlFilter .filter-btn').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    const f=btn.dataset.fcat;
-    document.querySelectorAll('#dlGrid .dl-card').forEach(c=>c.style.display=(f==='all'||c.dataset.fcat===f)?'':'none');
-  },{once:true});
   observeFadeUp();
 }
 renderHandouts();
+
+document.getElementById('dlFilter').addEventListener('click',function(e){
+  const btn=e.target.closest('.filter-btn');if(!btn)return;
+  document.querySelectorAll('#dlFilter .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const f=btn.dataset.fcat;
+  document.querySelectorAll('#dlGrid .dl-card').forEach(c=>c.style.display=(f==='all'||c.dataset.fcat===f)?'':'none');
+});
 
 /* ══════════════ Live sync from admin ══════════════ */
 function renderAll(){
