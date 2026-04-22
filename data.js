@@ -1,7 +1,7 @@
 // =====================================================================
 // TECH SQUIDS — 網站資料設定檔 (data.js)
 // 由後台管理介面自動產生
-// 產生時間：2026/4/22 下午4:10:33
+// 產生時間：2026/4/22 下午4:10:54
 // =====================================================================
 
 var SITE_DATA = {
@@ -192,21 +192,6 @@ var SITE_DATA = {
       "note": "[全國教師在職進修網研習代碼：N/A]"
     },
     {
-      "id": "ws_1776755371257",
-      "status": "soon",
-      "title": "E-Paper資訊框",
-      "location": "新北市鶯歌自造教育及科技中心",
-      "capacity": 10,
-      "enrolled": 0,
-      "hours": 6,
-      "timeNote": "09:00 - 16:00",
-      "month": "JUN",
-      "day": "9",
-      "year": "2026",
-      "signupUrl": "https://www5.inservice.edu.tw/index_login.aspx",
-      "note": "[全國教師在職進修網研習代碼：N/A]"
-    },
-    {
       "id": "ws_1776845425903",
       "status": "soon",
       "title": "LED 資訊框",
@@ -220,6 +205,21 @@ var SITE_DATA = {
       "year": "2026",
       "signupUrl": "",
       "note": ""
+    },
+    {
+      "id": "ws_1776755371257",
+      "status": "soon",
+      "title": "E-Paper資訊框",
+      "location": "新北市鶯歌自造教育及科技中心",
+      "capacity": 10,
+      "enrolled": 0,
+      "hours": 6,
+      "timeNote": "09:00 - 16:00",
+      "month": "JUN",
+      "day": "9",
+      "year": "2026",
+      "signupUrl": "https://www5.inservice.edu.tw/index_login.aspx",
+      "note": "[全國教師在職進修網研習代碼：N/A]"
     }
   ],
   "handouts": [
