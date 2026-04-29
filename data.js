@@ -1,7 +1,7 @@
 // =====================================================================
 // TECH SQUIDS — 網站資料設定檔 (data.js)
 // 由後台管理介面自動產生
-// 產生時間：2026/4/22 下午4:29:29
+// 產生時間：2026/4/29 上午9:40:33
 // =====================================================================
 
 var SITE_DATA = {
@@ -33,7 +33,7 @@ var SITE_DATA = {
     "產品設計"
   ],
   "bio": [
-    "任職於<strong>新北市柑園國中</strong>，擔任生活科技教師，兼任資設組長。<br/>\n長期致力於推動<strong>跨域 STEAM 教育</strong>、創客教具設計與 AI 融入教學，<br/>\n也是「<strong>柑園國中棒球隊</strong>」的幕後推手之一。",
+    "任職於<strong>新北市柑園國中</strong>，擔任生活科技雙語教師，兼任資設組長。<br/>\n長期致力於推動<strong>跨域 STEAM、MAKER教育</strong>、創客教具設計與 AI 融入教學，<br/>\n也是「<strong>柑園國中棒球隊</strong>」的幕後推手之一。",
     "研究主軸聚焦於<strong>MAKER教育與教具設計</strong>，<br/>\n盼讓教師於科技領域教學可以更加得心應手。",
     "研習工作坊風格強調<strong>紮實、豐富、創新</strong>。<br/>\n每一場研習都希望讓學員帶著<strong>明天就能用</strong>的實戰能力與實作成品回家。"
   ],
@@ -220,6 +220,21 @@ var SITE_DATA = {
       "year": "2026",
       "signupUrl": "https://www5.inservice.edu.tw/index_login.aspx",
       "note": "[全國教師在職進修網研習代碼：N/A]"
+    },
+    {
+      "id": "ws_1777426825922",
+      "status": "soon",
+      "title": "夢的N次方新北場－增能工作坊",
+      "location": "新北市立海山高中",
+      "capacity": 30,
+      "enrolled": 0,
+      "hours": 3,
+      "timeNote": "待定",
+      "month": "OCT",
+      "day": "3-4",
+      "year": "2026",
+      "signupUrl": "",
+      "note": "詳細內容待公布"
     }
   ],
   "handouts": [
