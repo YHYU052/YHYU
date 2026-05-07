@@ -1,7 +1,7 @@
 // =====================================================================
 // TECH SQUIDS — 網站資料設定檔 (data.js)
 // 由後台管理介面自動產生
-// 產生時間：2026/5/7 下午8:38:19
+// 產生時間：2026/5/7 下午8:41:35
 // =====================================================================
 
 var SITE_DATA = {
@@ -239,6 +239,22 @@ var SITE_DATA = {
   ],
   "handouts": [
     {
+      "id": "hl_1778157489432",
+      "title": "放大電子電路教具",
+      "cat": "handout",
+      "date": "2026/05/05",
+      "format": "Google Drive",
+      "size": "8.4 MB",
+      "desc": "內含：3D列印件、組裝影片(建置中)。 如需材料包請於下方許願池留下聯絡方式",
+      "icon": "fa-lightbulb",
+      "password": "260505",
+      "url": "https://drive.google.com/drive/folders/10vJb3S1qLuLcYFbRmEHuT5zkcI4W2pd-?usp=drive_link",
+      "tags": [
+        "放大電子電路教具",
+        "生活科技"
+      ]
+    },
+    {
       "id": "ai2024dl",
       "title": "LED Wi-Fi 時鐘 - 台北新興",
       "cat": "handout",
@@ -316,22 +332,6 @@ var SITE_DATA = {
       "tags": [
         "工程字",
         "雷射切割"
-      ]
-    },
-    {
-      "id": "hl_1778157489432",
-      "title": "放大電子電路教具",
-      "cat": "handout",
-      "date": "2026/05/05",
-      "format": "Google Drive",
-      "size": "8.4 MB",
-      "desc": "內含：3D列印件、組裝影片(建置中)。 如需材料包請於下方許願池留下聯絡方式",
-      "icon": "fa-file-pdf",
-      "password": "260505",
-      "url": "https://drive.google.com/drive/folders/10vJb3S1qLuLcYFbRmEHuT5zkcI4W2pd-?usp=drive_link",
-      "tags": [
-        "放大電子電路教具",
-        "生活科技"
       ]
     }
   ],
